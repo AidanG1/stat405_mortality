@@ -1,0 +1,15 @@
+.vscode
+/data/*.csv
+/data/*.rds
+/spotify
+__pycache__
+dj/proj
+final_cache
+*.log
+*.tex
+index_files/images
+index_files/fonts
+.Rhistory
+.Rdata
+.DS_Store
+*.sqlite
