@@ -36,4 +36,22 @@ SHOW_BACK_TO_TOP <- FALSE
 # SHOW_BACK_TO_TOP=TRUE
 ```
 
+```{r imports}
+library(tidyverse)
+library(RSQLite)
+```
+
+```{r include-db, include = FALSE}
+db <- dbConnect("data/mortality.sqlite")
+query <- function(q) {
+    req <- dbSendQuery(db, q)
+    results <- dbFetch(req)
+    dbClearResults(req)
+    results
+}
+```
 # Introduction
+
+```{r disconnect-db, include = FALSE}
+dbDisconnect(db)
+```
