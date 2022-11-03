@@ -46,7 +46,7 @@ db <- dbConnect(SQLite(), "data/mortality.sqlite")
 query <- function(q) {
     req <- dbSendQuery(db, q)
     results <- dbFetch(req)
-    dbClearResults(req)
+    dbClearResult(req)
     results
 }
 ```
