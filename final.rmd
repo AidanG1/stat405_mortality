@@ -42,7 +42,7 @@ library(RSQLite)
 ```
 
 ```{r include-db, include = FALSE}
-db <- dbConnect("data/mortality.sqlite")
+db <- dbConnect(SQLite(), "data/mortality.sqlite")
 query <- function(q) {
     req <- dbSendQuery(db, q)
     results <- dbFetch(req)
