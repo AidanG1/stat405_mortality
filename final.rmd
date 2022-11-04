@@ -81,6 +81,10 @@ source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 ```
 
+## Cause of Death by Education
+```{r plot_education_cause, fig.height = 11, fig.width = 8}
+source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
+```
 
 ```{r disconnect-db, include = FALSE}
 dbDisconnect(db)
