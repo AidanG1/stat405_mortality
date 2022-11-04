@@ -51,6 +51,16 @@ query <- function(q) {
 }
 ```
 # Introduction
+Our main dataset is a mortality dataset from the National Bureau of Economic Research. There are new versions of it each year and we eare using the 2019 version. Each row is one death based on information filed in death certificates in the 50 states plus Washington DC. Columns are factors regarding the status of persons involved in deaths that can be gleaned from public death certificates. The dataset is focused on the different causes of death. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
+
+# Questions
+We are interested in what different factors correlated with higher death rates based on cause of death, age groups, and weekdays.
+
+## Explain the plot and put it with a question
+```{r plot_weekday_deaths}
+source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
+```
+
 
 ```{r disconnect-db, include = FALSE}
 dbDisconnect(db)
