@@ -60,6 +60,10 @@ We are interested in what different factors correlated with higher death rates b
 ```{r plot_weekday_deaths}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 ```
+```{r plot_weekday_deaths}
+source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
+```
+
 
 
 ```{r disconnect-db, include = FALSE}
