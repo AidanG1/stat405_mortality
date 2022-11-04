@@ -13,3 +13,4 @@ index_files/fonts
 .Rdata
 .DS_Store
 *.sqlite
+data/.~lock.*

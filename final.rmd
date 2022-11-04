@@ -63,8 +63,9 @@ source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 ```{r plot_age_deaths, fig.height = 11, fig.width = 8}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
 ```
-
-
+```{r plot_age_manner, fig.height = 11, fig.width = 8}
+source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
+```
 
 ```{r disconnect-db, include = FALSE}
 dbDisconnect(db)
