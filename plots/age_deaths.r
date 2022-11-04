@@ -8,5 +8,9 @@ ggplot(deaths_by_age, aes(x = age, y = count, fill = age)) +
     geom_bar(stat = "identity") +
     labs(x = "Age Range", y = "Number of Deaths") +
     ggtitle("Deaths by Age") +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+    theme(
+        axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
+        axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
+        legend.position = "bottom"
+    )
 
