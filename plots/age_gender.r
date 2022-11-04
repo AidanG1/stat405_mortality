@@ -1,21 +1,4 @@
-# boxplots by manner of death and age
-
-manner_by_age <- query("select ager52, mandeath, count(*) as count from mortality group by ager52, mandeath order by mandeath")
-
-# do rescale
-fn <- function(x) log(x + 1)
-manner_by_age$count <- fn(manner_by_age$count)
-
-manners <- list(
-    "1" = "Accident",
-    "2" = "Suicide",
-    "3" = "Homicide",
-    "4" = "Pending Investigation",
-    "5" = "Could Not Determine",
-    "6" = "Self-Inflicted",
-    "7" = "Natural",
-    "8" = "Not Specified"
-)
+deaths_by_age_sex <- query("select ager52, sex, count(*) as count from mortality group by ager52, sex order by ager52")
 
 ages <- list(
     "1" = "Under 1 hour",
@@ -72,18 +55,33 @@ ages <- list(
     "52" = "Age not stated"
 )
 
-manner_by_age$mandeath[is.na(manner_by_age$mandeath)] <- 8
+deaths_by_age_sex <- deaths_by_age_sex %>% mutate(age = ages[ager52])
 
-manner_by_age <- manner_by_age %>% mutate(manner = manners[mandeath], age = ages[ager52])
+deaths_by_age_sex$age <- factor(
+    deaths_by_age_sex$age,
+    levels = unique(deaths_by_age_sex$age[
+        order(deaths_by_age_sex$ager52, deaths_by_age_sex$sex)
+    ])
+)
 
-ggplot(manner_by_age, aes(ager52, mandeath)) +
-    geom_tile(aes(fill = count), color = "aquamarine") +
-    scale_fill_gradient(low = "aquamarine", high = "dodgerblue") +
-    scale_x_continuous(breaks = seq(1, 52, 1), labels = ages) +
-    scale_y_continuous(breaks = seq(1, 8, 1), labels = manners) +
+sr <- (deaths_by_age_sex %>% filter(sex == "M") %>% select(count) / (deaths_by_age_sex %>% filter(sex == "F") %>% select(count) + deaths_by_age_sex %>% filter(sex == "M") %>% select(count)))$count
+
+s_labels <- c()
+
+for (val in sr) {
+    s_labels <- c(s_labels, paste0(round(val, digits = 4), "%"), '')
+}
+
+ggplot(deaths_by_age_sex, aes(
+    x = age, y = count, fill = sex
+)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = s_labels), hjust=-0.1, angle = 90) +
+    labs(x = "Age Range", y = "Number of Deaths") +
+    ggtitle("Deaths by Age on a Log Scale with Percent Male") +
     theme(
         axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
         axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
+        legend.position = "bottom"
     ) +
-    ggtitle("Manner of Death by Age on a log scale") +
-    labs(x = "Age", y = "Manner of Death")
+    scale_y_log10()
