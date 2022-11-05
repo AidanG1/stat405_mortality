@@ -72,16 +72,21 @@ source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Manner
+Here, we plotted the manner of death versus age and counted how many people of a certain aged died based on a certain manner of death. A few key finding of this analysis shows that the majority of people die from natural causes, especially those aged 60+ and less than 1 day old, and accidental causes, spanning across all age groups. What this plot may help to inform us about is the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental related deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death amongst the different age groups, and further promote research in what actual activites people are participating in that lead to their manner of death.
+
 ```{r plot_age_manner, fig.height = 11, fig.width = 8}
 source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Age and Gender
+In this plot, we plotted the number of deaths versus age ranges while demonstrating how many men compared to women passed away in each age category. In each of the bars, the red fill represents the amount of women who passed away in that particular age range while the blue accounts for the amount of men. The percentage seen in each bar represents the proportion of men in a given age range that passed away. This analysis shows that the majority of people under the age of 80 who pass away tend to be men, as nearly every bar from ages 0-80 shows the proportion of male deaths to be above 50%. This proportion of male deaths goes down after 80 years of age, and is likely because women who are of an older age tend to live to a complete life expectancy. What this plot may help to inform us about is the differences in male and females lives and life expectancies. Further research into differences in lifestyle choices for men versus women as a whole may help better explain why women tend to live longer than men. Furthermore, this plot accompanied with a plot on cause of death by gender, may assist in determining what kind of, potentially more risky, behaviors men may partake in during their lifetimes that lead to an earlier death than women.
 ```{r plot_age_gender, fig.height = 11, fig.width = 8}
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Cause of Death by Education
+
+
 ```{r plot_education_cause, fig.height = 11, fig.width = 8}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 ```
