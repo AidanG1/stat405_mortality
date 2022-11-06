@@ -85,8 +85,7 @@ source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Cause of Death by Education
-
-
+For most causes of death, level of educuation does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurences in those with 8th grade or less education and those with unknown education and nearly no occurences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing propotions. "Syphilis" has a quite small sample size but unknown education has the highest mortality propotion. For "Assault (homicide)", 9 - 12th grade, no diploma has thhe highest mortality proportion.
 ```{r plot_education_cause, fig.height = 11, fig.width = 8}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 ```
