@@ -101,6 +101,7 @@ source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Free Text Analysis: Selected Health Conditions by Age Group
+Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
 ```{r plot_conditions_text, fig.height = 7, fig.width = 8}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
