@@ -43,6 +43,7 @@ library(RSQLite)
 
 ```{r include-db, include = FALSE}
 db <- dbConnect(SQLite(), "data/mortality.sqlite")
+initRegExp(db)
 query <- function(q) {
     req <- dbSendQuery(db, q)
     results <- dbFetch(req)
@@ -96,6 +97,11 @@ source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 For most causes of death, level of education does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurrences in those with 8th grade or less education and those with unknown education and nearly no occurrences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing proportions. "Syphilis" has a quite small sample size but unknown education has the highest mortality proportion. For "Assault (homicide)", 9 - 12th grade, no diploma has the highest mortality proportion.
 ```{r plot_education_cause, fig.height = 11, fig.width = 8}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
+```
+
+## Free Text Analysis: Selected Health Conditions by Age Group
+```{r plot_conditions_text, fig.height = 7, fig.width = 8}
+source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 
 ```{r disconnect-db, include = FALSE}
