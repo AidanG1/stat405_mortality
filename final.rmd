@@ -67,6 +67,11 @@ First, we plotted weekday of death versus death counts. There were the most deat
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
+## Deaths by Month
+```{r plot_month_deaths}
+source("plots/month_count.r", local = TRUE, print.eval = TRUE)
+```
+
 ## Deaths by Age
 Next, we plotted age versus death counts. Deaths were most prevalent among larger age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die.
 
