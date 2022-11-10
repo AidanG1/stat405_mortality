@@ -57,7 +57,7 @@ Our main dataset is a mortality dataset from the National Bureau of Economic Res
 For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We will combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
 
 # Questions
-We are interested in what different factors are correlated with higher death rates based on cause of death, age groups, and weekdays. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different casues of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
+We are interested in what different factors are correlated with higher death rates based on cause of death, age groups, and weekdays. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
 
 # Exploration
 ## Deaths by Weekday
@@ -73,14 +73,14 @@ source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Age
-Next, we plotted age versus death counts. Deaths were most prevalent among larger age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die.
+Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die.
 
 ```{r plot_age_deaths, fig.height = 11, fig.width = 8}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Manner
-Here, we plotted the manner of death versus age and counted how many people of a certain aged died based on a certain manner of death. A few key finding of this analysis shows that the majority of people die from natural causes, especially those aged 60+ and less than 1 day old, and accidental causes, spanning across all age groups. What this plot may help to inform us about is the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental related deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death amongst the different age groups, and further promote research in what actual activites people are participating in that lead to their manner of death.
+Here, we plotted the manner of death versus age and counted how many people of a certain aged died based on a certain manner of death. A few key finding of this analysis shows that the majority of people die from natural causes, especially those aged 60+ and less than 1 day old, and accidental causes, spanning across all age groups. What this plot may help to inform us about is the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental related deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death among the different age groups, and further promote research in what actual activities people are participating in that lead to their manner of death.
 
 ```{r plot_age_manner, fig.height = 11, fig.width = 8}
 source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
@@ -93,7 +93,7 @@ source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Cause of Death by Education
-For most causes of death, level of educuation does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurences in those with 8th grade or less education and those with unknown education and nearly no occurences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing propotions. "Syphilis" has a quite small sample size but unknown education has the highest mortality propotion. For "Assault (homicide)", 9 - 12th grade, no diploma has thhe highest mortality proportion.
+For most causes of death, level of education does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurrences in those with 8th grade or less education and those with unknown education and nearly no occurrences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing proportions. "Syphilis" has a quite small sample size but unknown education has the highest mortality proportion. For "Assault (homicide)", 9 - 12th grade, no diploma has the highest mortality proportion.
 ```{r plot_education_cause, fig.height = 11, fig.width = 8}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 ```
