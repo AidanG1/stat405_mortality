@@ -69,6 +69,7 @@ source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Month
+The most deaths occur in the coldest and darkest months of the year which are February, January, December, and March. Summer months have lower deaths by around 10-11%. 
 ```{r plot_month_deaths}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 ```
