@@ -203,7 +203,7 @@ for (i in 1:rows) {
         }
         draw_person(
             vp, natural, pending, accident, homicide, suicide, cnd,
-            c("green", "red", "magenta", "orange", "pink", "blue")
+            c("#ff7dab", "#dfce62", "#e09f6b", "#936caf", "#e99561", "#aec489")
         )
     }
 }

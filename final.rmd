@@ -107,6 +107,11 @@ Using regular expressions, we polled the BRFSS data set for questions related to
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 
+## Killer
+```{r plot_killer, fig.height = 7, fig.width = 8}
+source("plots/killer.r", local = TRUE, print.eval = TRUE)
+```
+
 ```{r disconnect-db, include = FALSE}
 dbDisconnect(db)
 ```
