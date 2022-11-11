@@ -70,6 +70,7 @@ draw_person <- function(vp, head_scale, neck_scale,
 # classifications: mandeath & ager12 & martial status
 df <- query("select
     mandeath,
+    marstat,
     ager12,
     avg(CASE WHEN record_1 IS NOT NULL AND record_1 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_2 IS NOT NULL AND record_2 <> '' THEN 1 ELSE 0 END +
@@ -91,7 +92,7 @@ df <- query("select
         CASE WHEN record_18 IS NOT NULL AND record_18 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_19 IS NOT NULL AND record_19 <> '' THEN 1 ELSE 0 END +
     CASE WHEN record_20 IS NOT NULL THEN 1 ELSE 0 END) AS avg_record_count
-from mortality group by mandeath, ager12")
+from mortality group by mandeath, ager12, marstat")
 
 df$mandeath[is.na(df$mandeath)] <- 8
 
@@ -121,17 +122,30 @@ mandeaths <- list(
     "8" = "Not Specified"
 )
 
-df <- df %>% mutate(manner = mandeaths[mandeath], age = ager12s[ager12])
+marstats <- list(
+    "S" = "Never married, single",
+    "M" = "Married",
+    "W" = "Widowed",
+    "D" = "Divorced",
+    "U" = "Martial status unknown"
+)
+
+df <- df %>% mutate(manner = mandeaths[mandeath], age = ager12s[ager12], martial_status = marstats[marstat])
 
 df$age <- factor(df$age, levels = unique(df$age[order(df$ager12)]))
 
 df$manner <- factor(df$manner, levels = unique(df$manner[order(df$mandeath)]))
 
-rows <- 3
-cols <- 4
+df$martial_status <- factor(df$martial_status, levels = unique(df$martial_status[order(df$marstat)]))
+
+row_var <- unique(df$martial_status)
+column_var <- unique(df$age)
+
+rows <- length(row_var)
+cols <- length(column_var)
 title <- "Title"
-labels.x <- c("A", "B", "C", "D")
-labels.y <- c("A", "B", "C")
+labels.x <- as.vector(row_var)
+labels.y <- as.vector(column_var)
 
 grid.newpage()
 grid.lines(c(0.1, 0.9), c(0.1, 0.1))
@@ -148,15 +162,47 @@ ly <- grid.layout(rows, cols)
 pushViewport(viewport(layout = ly))
 for (i in 1:rows) {
     pushViewport(viewport(layout.pos.row = i))
-    grid.text(labels.y[i], x = unit(-1, "lines"))
+    grid.text(labels.x[i],
+        x = unit(-1, "lines"),
+        gp = gpar(fontsize = 8)
+    )
     popViewport()
     for (j in 1:cols) {
         pushViewport(viewport(layout.pos.col = j))
-        grid.text(labels.x[j], y = unit(-1, "lines"))
+        grid.text(labels.y[j], y = unit(-1, "lines"), gp = gpar(fontsize = 8))
         popViewport()
         vp <- viewport(layout.pos.row = i, layout.pos.col = j)
+        data <- df[df$martial_status == row_var[i] & df$age == column_var[j], ]
+        natural <- data[data$manner == "Natural", "avg_record_count"]
+        pending <- data[data$manner == "Pending Investigation", "avg_record_count"]
+        accident <- data[data$manner == "Accident", "avg_record_count"]
+        homicide <- data[data$manner == "Homicide", "avg_record_count"]
+        suicide <- data[data$manner == "Suicide", "avg_record_count"]
+        cnd <- data[data$manner == "Could Not Determine", "avg_record_count"]
+        ns <- data[data$manner == "Not Specified", "avg_record_count"]
+        if (length(natural) == 0) {
+            natural <- 0
+        }
+        if (length(pending) == 0) {
+            pending <- 0
+        }
+        if (length(accident) == 0) {
+            accident <- 0
+        }
+        if (length(homicide) == 0) {
+            homicide <- 0
+        }
+        if (length(suicide) == 0) {
+            suicide <- 0
+        }
+        if (length(cnd) == 0) {
+            cnd <- 0
+        }
+        if (length(ns) == 0) {
+            ns <- 0
+        }
         draw_person(
-            vp, i, 1, 1, 1, 1, 1,
+            vp, natural, pending, accident, homicide, suicide, cnd,
             c("green", "red", "magenta", "orange", "pink", "blue")
         )
     }
