@@ -39,6 +39,7 @@ SHOW_BACK_TO_TOP <- FALSE
 ```{r imports}
 library(tidyverse)
 library(RSQLite)
+library(grid)
 ```
 
 ```{r include-db, include = FALSE}
