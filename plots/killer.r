@@ -143,7 +143,7 @@ column_var <- unique(df$age)
 
 rows <- length(row_var)
 cols <- length(column_var)
-title <- "Title"
+title <- "Killer Plot Draft 1"
 labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
 

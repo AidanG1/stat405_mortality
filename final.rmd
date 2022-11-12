@@ -108,6 +108,7 @@ source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Killer
+This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
 ```{r plot_killer, fig.height = 7, fig.width = 8}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 ```
