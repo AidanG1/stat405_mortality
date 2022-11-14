@@ -185,7 +185,7 @@ column_var <- unique(df$age)
 
 rows <- length(row_var)
 cols <- length(column_var)
-title <- "Killer Plot Draft 1"
+title <- "Average Ailments Attributed to Death by Marital Status, Age, Matter"
 labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
 person_colors <- c("#ff7dab", "#dfce62", "#e09f6b", "#936caf", "#e99561", "#aec489")
