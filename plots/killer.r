@@ -67,6 +67,48 @@ draw_person <- function(vp, head_scale, neck_scale,
     popViewport()
 }
 
+legend <- function(colors = "black") {
+    colors <- rep(colors, length.out = 6)
+    grid.rect()
+    ## head, neck, left arm, right arm, left leg, right leg
+    grid.text("Head",
+              x = 0.15, y = 6/7,
+              gp = gpar(col = colors[1], fontsize = 8))
+    grid.text("Natural causes",
+              x = 0.65, y = 6/7,
+              gp = gpar(fontsize = 8))
+    grid.text("Neck", 
+              x = 0.15, y = 5/7,
+              gp = gpar(col = colors[2], fontsize = 8))
+    grid.text("Pending Investigation",
+              x = 0.65, y = 5/7,
+              gp = gpar(fontsize = 8))
+    grid.text("Left arm", 
+              x = 0.15, y = 4/7,
+              gp = gpar(col = colors[3], fontsize = 8))
+    grid.text("Accident",
+              x = 0.65, y = 4/7,
+              gp = gpar(fontsize = 8))
+    grid.text("Right arm", 
+              x = 0.15, y = 3/7,
+              gp = gpar(col = colors[4], fontsize = 8))
+    grid.text("Homicide",
+              x = 0.65, y = 3/7,
+              gp = gpar(fontsize = 8))
+    grid.text("Left leg", 
+              x = 0.15, y = 2/7,
+              gp = gpar(col = colors[5], fontsize = 8))
+    grid.text("Suicide",
+              x = 0.65, y = 2/7,
+              gp = gpar(fontsize = 8))
+    grid.text("Right leg",
+              x = 0.15, y = 1/7,
+              gp = gpar(col = colors[6], fontsize = 8))
+    grid.text("Could not determine",
+              x = 0.65, y = 1/7,
+              gp = gpar(fontsize = 8))
+} 
+
 # classifications: mandeath & ager12 & martial status
 df <- query("select
     mandeath,
@@ -146,11 +188,18 @@ cols <- length(column_var)
 title <- "Killer Plot Draft 1"
 labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
+person_colors <- c("#ff7dab", "#dfce62", "#e09f6b", "#936caf", "#e99561", "#aec489")
 
 grid.newpage()
 pushViewport(viewport(
+    x = 0.84, y = 0.5, just = c("left", "center"),
+    width = 0.15, height = 0.3
+))
+legend(person_colors)
+popViewport()
+pushViewport(viewport(
     x = 0.1, y = 0.1, just = c("left", "bottom"),
-    width = 0.9, height = 0.9
+    width = 0.8, height = 0.9
 ))
 grid.lines(c(0.1, 0.9), c(0.1, 0.1))
 grid.lines(c(0.1, 0.1), c(0.1, 0.9))
@@ -212,7 +261,7 @@ for (i in 1:rows) {
         }
         draw_person(
             vp, natural, pending, accident, homicide, suicide, cnd,
-            c("#ff7dab", "#dfce62", "#e09f6b", "#936caf", "#e99561", "#aec489")
+            person_colors
         )
     }
 }
