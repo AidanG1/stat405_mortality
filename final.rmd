@@ -9,16 +9,16 @@ colorlinks: yes
 output:
   pdf_document:
     default
-  prettydoc::html_pretty:
-    toc: yes
-    toc_depth: 3
-    theme: hpstr
-    highlight: tango
-    df_print: paged
-  html_document:
-    toc: yes
-    toc_depth: '3'
-    df_print: paged
+  # prettydoc::html_pretty:
+  #   toc: yes
+  #   toc_depth: 3
+  #   theme: hpstr
+  #   highlight: tango
+  #   df_print: paged
+  # html_document:
+  #   toc: yes
+  #   toc_depth: '3'
+  #   df_print: paged
 header-includes: \usepackage{setspace}
 ---
 \doublespacing
@@ -46,10 +46,10 @@ library(grid)
 db <- dbConnect(SQLite(), "data/mortality.sqlite")
 initRegExp(db)
 query <- function(q) {
-    req <- dbSendQuery(db, q)
-    results <- dbFetch(req)
-    dbClearResult(req)
-    results
+  req <- dbSendQuery(db, q)
+  results <- dbFetch(req)
+  dbClearResult(req)
+  results
 }
 ```
 # Introduction
