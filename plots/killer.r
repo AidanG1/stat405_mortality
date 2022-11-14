@@ -164,6 +164,7 @@ for (i in 1:rows) {
     pushViewport(viewport(layout.pos.row = i))
     grid.text(labels.x[i],
         x = unit(-1, "lines"),
+        just = "right",
         gp = gpar(fontsize = 8)
     )
     popViewport()
