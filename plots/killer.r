@@ -148,6 +148,10 @@ labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
 
 grid.newpage()
+pushViewport(viewport(
+    x = 0.1, y = 0.1, just = c("left", "bottom"),
+    width = 0.9, height = 0.9
+))
 grid.lines(c(0.1, 0.9), c(0.1, 0.1))
 grid.lines(c(0.1, 0.1), c(0.1, 0.9))
 grid.text(title,
@@ -156,7 +160,7 @@ grid.text(title,
 )
 pushViewport(viewport(
     x = 0.1, y = 0.1, just = c("left", "bottom"),
-    width = 0.8, 0.8
+    width = 0.8, height = 0.8
 ))
 ly <- grid.layout(rows, cols)
 pushViewport(viewport(layout = ly))
@@ -170,7 +174,11 @@ for (i in 1:rows) {
     popViewport()
     for (j in 1:cols) {
         pushViewport(viewport(layout.pos.col = j))
-        grid.text(labels.y[j], y = unit(-1, "lines"), gp = gpar(fontsize = 8))
+        grid.text(labels.y[j],
+                  y = unit(-1, "lines"),
+                  just = "right",
+                  gp = gpar(fontsize = 8),
+                  rot = 60)
         popViewport()
         vp <- viewport(layout.pos.row = i, layout.pos.col = j)
         data <- df[df$martial_status == row_var[i] & df$age == column_var[j], ]
