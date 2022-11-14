@@ -61,6 +61,12 @@ For our secondary dataset, we are using the Behavioral Risk Factor Surveillance 
 # Questions
 We are interested in what different factors are correlated with higher death rates based on cause of death, age groups, and weekdays. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
 
+## Killer
+This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
+```{r plot_killer, fig.height = 7, fig.width = 8}
+source("plots/killer.r", local = TRUE, print.eval = TRUE)
+```
+
 # Exploration
 ## Deaths by Weekday
 First, we plotted weekday of death versus death counts. There were the most deaths on Tuesday. However, days have an average of `r query("SELECT count(*) FROM mortality")$count / 365` deaths and 2019 had an extra Tuesday so adjusting for that, the most deaths were on Fridays.
@@ -105,12 +111,6 @@ source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
 ```{r plot_conditions_text, fig.height = 7, fig.width = 8}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
-```
-
-## Killer
-This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
-```{r plot_killer, fig.height = 7, fig.width = 8}
-source("plots/killer.r", local = TRUE, print.eval = TRUE)
 ```
 
 ```{r disconnect-db, include = FALSE}
