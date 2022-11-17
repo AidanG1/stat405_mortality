@@ -66,6 +66,9 @@ This plot demonstrates the most common manners of death among people in differen
 ```{r plot_killer, fig.height = 7, fig.width = 10}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 ```
+```{r shiny, include=FALSE}
+source("shiny.r", local = TRUE, print.eval = TRUE)
+```
 
 # Exploration
 ## Deaths by Weekday

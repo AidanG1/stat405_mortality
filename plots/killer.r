@@ -72,42 +72,54 @@ legend <- function(colors = "black") {
     grid.rect()
     ## head, neck, left arm, right arm, left leg, right leg
     grid.text("Head",
-              x = 0.15, y = 6/7,
-              gp = gpar(col = colors[1], fontsize = 8))
+        x = 0.15, y = 6 / 7,
+        gp = gpar(col = colors[1], fontsize = 8)
+    )
     grid.text("Natural causes",
-              x = 0.65, y = 6/7,
-              gp = gpar(fontsize = 8))
-    grid.text("Neck", 
-              x = 0.15, y = 5/7,
-              gp = gpar(col = colors[2], fontsize = 8))
+        x = 0.65, y = 6 / 7,
+        gp = gpar(fontsize = 8)
+    )
+    grid.text("Neck",
+        x = 0.15, y = 5 / 7,
+        gp = gpar(col = colors[2], fontsize = 8)
+    )
     grid.text("Pending Investigation",
-              x = 0.65, y = 5/7,
-              gp = gpar(fontsize = 8))
-    grid.text("Left arm", 
-              x = 0.15, y = 4/7,
-              gp = gpar(col = colors[3], fontsize = 8))
+        x = 0.65, y = 5 / 7,
+        gp = gpar(fontsize = 8)
+    )
+    grid.text("Left arm",
+        x = 0.15, y = 4 / 7,
+        gp = gpar(col = colors[3], fontsize = 8)
+    )
     grid.text("Accident",
-              x = 0.65, y = 4/7,
-              gp = gpar(fontsize = 8))
-    grid.text("Right arm", 
-              x = 0.15, y = 3/7,
-              gp = gpar(col = colors[4], fontsize = 8))
+        x = 0.65, y = 4 / 7,
+        gp = gpar(fontsize = 8)
+    )
+    grid.text("Right arm",
+        x = 0.15, y = 3 / 7,
+        gp = gpar(col = colors[4], fontsize = 8)
+    )
     grid.text("Homicide",
-              x = 0.65, y = 3/7,
-              gp = gpar(fontsize = 8))
-    grid.text("Left leg", 
-              x = 0.15, y = 2/7,
-              gp = gpar(col = colors[5], fontsize = 8))
+        x = 0.65, y = 3 / 7,
+        gp = gpar(fontsize = 8)
+    )
+    grid.text("Left leg",
+        x = 0.15, y = 2 / 7,
+        gp = gpar(col = colors[5], fontsize = 8)
+    )
     grid.text("Suicide",
-              x = 0.65, y = 2/7,
-              gp = gpar(fontsize = 8))
+        x = 0.65, y = 2 / 7,
+        gp = gpar(fontsize = 8)
+    )
     grid.text("Right leg",
-              x = 0.15, y = 1/7,
-              gp = gpar(col = colors[6], fontsize = 8))
+        x = 0.15, y = 1 / 7,
+        gp = gpar(col = colors[6], fontsize = 8)
+    )
     grid.text("Could not determine",
-              x = 0.65, y = 1/7,
-              gp = gpar(fontsize = 8))
-} 
+        x = 0.65, y = 1 / 7,
+        gp = gpar(fontsize = 8)
+    )
+}
 
 # classifications: mandeath & ager12 & martial status
 df <- query("select
@@ -172,11 +184,16 @@ marstats <- list(
     "U" = "Martial status unknown"
 )
 
-df <- df %>% mutate(manner = mandeaths[mandeath], age = ager12s[ager12], martial_status = marstats[marstat])
+df <- df %>% mutate(
+    manner = mandeaths[mandeath], age = ager12s[ager12], martial_status = marstats[marstat]
+)
 
 df$age <- factor(df$age, levels = unique(df$age[order(df$ager12)]))
 
-df$manner <- factor(df$manner, levels = unique(df$manner[order(df$mandeath)]))
+df$manner <- factor(
+    df$manner,
+    levels = unique(df$manner[order(df$mandeath)])
+)
 
 df$martial_status <- factor(df$martial_status, levels = unique(df$martial_status[order(df$marstat)]))
 
@@ -188,80 +205,98 @@ cols <- length(column_var)
 title <- "Average Ailments Attributed to Death by Marital Status, Age, Matter"
 labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
-person_colors <- c("#ff7dab", "#dfce62", "#e09f6b", "#936caf", "#e99561", "#aec489")
-
-grid.newpage()
-pushViewport(viewport(
-    x = 0.84, y = 0.5, just = c("left", "center"),
-    width = 0.15, height = 0.3
-))
-legend(person_colors)
-popViewport()
-pushViewport(viewport(
-    x = 0.1, y = 0.1, just = c("left", "bottom"),
-    width = 0.8, height = 0.9
-))
-grid.lines(c(0.1, 0.9), c(0.1, 0.1))
-grid.lines(c(0.1, 0.1), c(0.1, 0.9))
-grid.text(title,
-    x = 0.125, y = 0.925, just = c("left", "bottom"),
-    gp = gpar(fontsize = 18)
+person_colors <<- c(
+    "#ff7dab",
+    "#dfce62",
+    "#e09f6b",
+    "#936caf",
+    "#e99561",
+    "#aec489"
 )
-pushViewport(viewport(
-    x = 0.1, y = 0.1, just = c("left", "bottom"),
-    width = 0.8, height = 0.8
-))
-ly <- grid.layout(rows, cols)
-pushViewport(viewport(layout = ly))
-for (i in 1:rows) {
-    pushViewport(viewport(layout.pos.row = i))
-    grid.text(labels.x[i],
-        x = unit(-1, "lines"),
-        just = "right",
-        gp = gpar(fontsize = 8)
-    )
+
+draw_killer <<- function(person_colors, scale) {
+    print("Draw Killer")
+    grid.newpage()
+    pushViewport(viewport(
+        x = 0.84, y = 0.5, just = c("left", "center"),
+        width = 0.15, height = 0.3
+    ))
+    legend(person_colors)
     popViewport()
-    for (j in 1:cols) {
-        pushViewport(viewport(layout.pos.col = j))
-        grid.text(labels.y[j],
-                  y = unit(-1, "lines"),
-                  just = "right",
-                  gp = gpar(fontsize = 8),
-                  rot = 60)
-        popViewport()
-        vp <- viewport(layout.pos.row = i, layout.pos.col = j)
-        data <- df[df$martial_status == row_var[i] & df$age == column_var[j], ]
-        natural <- data[data$manner == "Natural", "avg_record_count"]
-        pending <- data[data$manner == "Pending Investigation", "avg_record_count"]
-        accident <- data[data$manner == "Accident", "avg_record_count"]
-        homicide <- data[data$manner == "Homicide", "avg_record_count"]
-        suicide <- data[data$manner == "Suicide", "avg_record_count"]
-        cnd <- data[data$manner == "Could Not Determine", "avg_record_count"]
-        ns <- data[data$manner == "Not Specified", "avg_record_count"]
-        if (length(natural) == 0) {
-            natural <- 0
-        }
-        if (length(pending) == 0) {
-            pending <- 0
-        }
-        if (length(accident) == 0) {
-            accident <- 0
-        }
-        if (length(homicide) == 0) {
-            homicide <- 0
-        }
-        if (length(suicide) == 0) {
-            suicide <- 0
-        }
-        if (length(cnd) == 0) {
-            cnd <- 0
-        }
-        if (length(ns) == 0) {
-            ns <- 0
-        }
-        draw_person(
-            vp, natural, pending, accident, homicide, suicide, cnd,
-            person_colors
+    pushViewport(viewport(
+        x = 0.1, y = 0.1, just = c("left", "bottom"),
+        width = 0.8, height = 0.9
+    ))
+    grid.lines(c(0.1, 0.9), c(0.1, 0.1))
+    grid.lines(c(0.1, 0.1), c(0.1, 0.9))
+    grid.text(title,
+        x = 0.125, y = 0.925, just = c("left", "bottom"),
+        gp = gpar(fontsize = 18)
+    )
+    pushViewport(viewport(
+        x = 0.1, y = 0.1, just = c("left", "bottom"),
+        width = 0.8, height = 0.8
+    ))
+    ly <- grid.layout(rows, cols)
+    pushViewport(viewport(layout = ly))
+    print("Created grid and legend")
+    for (i in 1:rows) {
+        pushViewport(viewport(layout.pos.row = i))
+        grid.text(labels.x[i],
+            x = unit(-1, "lines"),
+            just = "right",
+            gp = gpar(fontsize = 8)
         )
+        popViewport()
+        for (j in 1:cols) {
+            pushViewport(viewport(layout.pos.col = j))
+            grid.text(labels.y[j],
+                y = unit(-1, "lines"),
+                just = "right",
+                gp = gpar(fontsize = 8),
+                rot = 60
+            )
+            popViewport()
+            vp <- viewport(layout.pos.row = i, layout.pos.col = j)
+            data <- df[df$martial_status == row_var[i] & df$age == column_var[j], ]
+            natural <- data[data$manner == "Natural", "avg_record_count"]
+            pending <- data[data$manner == "Pending Investigation", "avg_record_count"]
+            accident <- data[data$manner == "Accident", "avg_record_count"]
+            homicide <- data[data$manner == "Homicide", "avg_record_count"]
+            suicide <- data[data$manner == "Suicide", "avg_record_count"]
+            cnd <- data[data$manner == "Could Not Determine", "avg_record_count"]
+            ns <- data[data$manner == "Not Specified", "avg_record_count"]
+            if (length(natural) == 0) {
+                natural <- 0
+            }
+            if (length(pending) == 0) {
+                pending <- 0
+            }
+            if (length(accident) == 0) {
+                accident <- 0
+            }
+            if (length(homicide) == 0) {
+                homicide <- 0
+            }
+            if (length(suicide) == 0) {
+                suicide <- 0
+            }
+            if (length(cnd) == 0) {
+                cnd <- 0
+            }
+            if (length(ns) == 0) {
+                ns <- 0
+            }
+            cat("Draw person", ((i - 1) * cols + j), "\n")
+            draw_person(
+                vp, natural * scale, pending * scale, accident * scale, homicide * scale, suicide * scale, cnd * scale,
+                person_colors
+            )
+        }
     }
 }
+
+# assign("draw_killer", draw_killer, envir = .GlobalEnv)
+# assign("person_colors", person_colors, envir = .GlobalEnv)
+
+# draw_killer(person_colors, 1)
