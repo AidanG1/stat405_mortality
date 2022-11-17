@@ -19,7 +19,7 @@ ui <- fluidPage(
 server <- function(input, output) {
     output$killerPlot <- renderPlot({
         print("Killer Plot Server Start")
-        draw_killer(person_colors, 1)
+        draw_killer(person_colors, input$scale)
         print("Killer Plot Server Done")
     })
 }
