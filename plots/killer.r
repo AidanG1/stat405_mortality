@@ -121,8 +121,9 @@ legend <- function(colors = "black") {
     )
 }
 
-# classifications: mandeath & ager12 & martial status
+# classifications: mandeath & ager12 & marital status
 df <- query("select
+    count(*) as count,
     mandeath,
     marstat,
     ager12,
@@ -181,11 +182,11 @@ marstats <- list(
     "M" = "Married",
     "W" = "Widowed",
     "D" = "Divorced",
-    "U" = "Martial status unknown"
+    "U" = "Marital status unknown"
 )
 
 df <- df %>% mutate(
-    manner = mandeaths[mandeath], age = ager12s[ager12], martial_status = marstats[marstat]
+    manner = mandeaths[mandeath], age = ager12s[ager12], marital_status = marstats[marstat]
 )
 
 df$age <- factor(df$age, levels = unique(df$age[order(df$ager12)]))
@@ -195,9 +196,24 @@ df$manner <- factor(
     levels = unique(df$manner[order(df$mandeath)])
 )
 
-df$martial_status <- factor(df$martial_status, levels = unique(df$martial_status[order(df$marstat)]))
+df$marital_status <- factor(df$marital_status, levels = unique(df$marital_status[order(df$marstat)]))
 
-row_var <- unique(df$martial_status)
+draw_table <<- function(grouping) {
+    table_df <- df %>% 
+        group_by({{ grouping }}) %>% 
+        rename(
+            Manner = manner,
+            Age = age,
+            `Marital Status` = marital_status
+        ) %>%
+        summarize(
+            N = sum(count),
+            `Average Record Count` = weighted.mean(avg_record_count, count)
+        )
+    kable(table_df)
+}
+
+row_var <- unique(df$marital_status)
 column_var <- unique(df$age)
 
 rows <- length(row_var)
@@ -215,7 +231,7 @@ person_colors <<- c(
 )
 
 draw_killer <<- function(person_colors, scale) {
-    print("Draw Killer")
+    # print("Draw Killer")
     grid.newpage()
     pushViewport(viewport(
         x = 0.84, y = 0.5, just = c("left", "center"),
@@ -239,7 +255,7 @@ draw_killer <<- function(person_colors, scale) {
     ))
     ly <- grid.layout(rows, cols)
     pushViewport(viewport(layout = ly))
-    print("Created grid and legend")
+    # print("Created grid and legend")
     for (i in 1:rows) {
         pushViewport(viewport(layout.pos.row = i))
         grid.text(labels.x[i],
@@ -258,7 +274,7 @@ draw_killer <<- function(person_colors, scale) {
             )
             popViewport()
             vp <- viewport(layout.pos.row = i, layout.pos.col = j)
-            data <- df[df$martial_status == row_var[i] & df$age == column_var[j], ]
+            data <- df[df$marital_status == row_var[i] & df$age == column_var[j], ]
             natural <- data[data$manner == "Natural", "avg_record_count"]
             pending <- data[data$manner == "Pending Investigation", "avg_record_count"]
             accident <- data[data$manner == "Accident", "avg_record_count"]
@@ -287,7 +303,7 @@ draw_killer <<- function(person_colors, scale) {
             if (length(ns) == 0) {
                 ns <- 0
             }
-            cat("Draw person", ((i - 1) * cols + j), "\n")
+            # cat("Draw person", ((i - 1) * cols + j), "\n")
             draw_person(
                 vp, natural * scale, pending * scale, accident * scale, homicide * scale, suicide * scale, cnd * scale,
                 person_colors

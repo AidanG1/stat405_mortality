@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  # pdf_document:
-  #   default
-  prettydoc::html_pretty:
-    toc: yes
-    toc_depth: 3
-    theme: hpstr
-    highlight: tango
-    df_print: paged
+  pdf_document:
+    default
+  # prettydoc::html_pretty:
+  #   toc: yes
+  #   toc_depth: 3
+  #   theme: hpstr
+  #   highlight: tango
+  #   df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -29,10 +29,10 @@ options(digits = 2)
 # knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, dev = 'png')
 # SHOW_BACK_TO_TOP=FALSE
 # for PDF no code
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", results = "hide", out.width = "100%", fig.align = "center", dpi = 300)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300)
 # SHOW_BACK_TO_TOP <- FALSE
 # for html with svg
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
 # SHOW_BACK_TO_TOP=TRUE
 ```
 ```{r imports}
@@ -130,7 +130,7 @@ educations <- list(
 )
 ```
 # Introduction
-Spoiler Warning
+Spoiler Warning<br>
 Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to the palace. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
 Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics. 
 Cue [epic](https://vid.puffyan.us/watch?v=yY7iGa4t9-I) music.
@@ -167,6 +167,10 @@ We are interested in what different factors are correlated with higher death rat
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
 ```{r plot_killer, fig.height = 7, fig.width = 10}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
+draw_killer(person_colors, 1) # this variable is defined globally
+draw_table(age)
+draw_table(marital_status)
+draw_table(manner)
 ```
 ```{r shiny, include=FALSE}
 # source("shiny.r", local = TRUE, print.eval = TRUE)
