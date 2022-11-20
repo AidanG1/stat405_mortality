@@ -40,6 +40,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png
 library(tidyverse)
 library(RSQLite)
 library(grid)
+library(knitr)
 ```
 
 ```{r include-db, include = FALSE}
@@ -53,7 +54,41 @@ query <- function(q) {
 }
 ```
 # Introduction
-Our main dataset is a mortality dataset from the National Bureau of Economic Research. There are new versions of it each year and we are using the 2019 version. Each row is one death based on information filed in death certificates in the 50 states plus Washington DC. Columns are factors regarding the status of persons involved in deaths that can be gleaned from public death certificates. The dataset is focused on the different causes of death. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
+⚠️ Spoiler Warning ⚠️
+Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to the palace. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
+Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics. 
+Cue [https://vid.puffyan.us/watch?v=yY7iGa4t9-I](epic) music.
+
+## Primary Dataset
+The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
+We made the decision to use the 2019 edition of the dataset since we did not want to focus on COVID-19. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
+In 2019, there were 2,861,523 deaths.
+```{r}
+q <- query("select count(*) as count, race40, ager52, educ2003, sex from mortality group by race40, ager52, educ2003, sex order by count desc limit 15")
+races <- list(
+  "1" = "White"
+)
+ages <- list(
+  "37" = "55-59",
+  "38" = "60-64",
+  "39" = "65-69",
+  "40" = "70-74",
+  "41" = "75-79",
+  "42" = "80-84",
+  "43" = "85-89",
+  "44" = "90-94",
+  "45" = "95-99"
+)
+educations <- list(
+  "3" = "High School Graduate or GED"
+)
+q %>% mutate(
+  race = races[race40],
+  age = ages[ager52],
+  education = educations[educ2003]
+) -> q
+kable(q %>% select(count, race, age, education))
+```
 
 ## Secondary Dataset
 For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We will combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
