@@ -133,7 +133,7 @@ educations <- list(
 Spoiler Warning
 Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to the palace. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
 Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics. 
-Cue [https://vid.puffyan.us/watch?v=yY7iGa4t9-I](epic) music.
+Cue [epic](https://vid.puffyan.us/watch?v=yY7iGa4t9-I) music.
 
 ## Primary Dataset
 The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
