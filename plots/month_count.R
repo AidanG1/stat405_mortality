@@ -35,8 +35,10 @@ month_counts$monthdth_name <- factor(month_counts$monthdth_name, levels = month_
 
 ggplot(month_counts) +
     geom_bar(aes(x = monthdth_name, weight = count, fill = monthdth_name)) +
-    labs(title = "Deaths per Day in Month",
-         x = "Month", y = "Deaths per day") +
+    labs(
+        title = "Deaths per Day in Month",
+        x = "Month", y = "Deaths per day"
+    ) +
     theme(
         axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
     ) +

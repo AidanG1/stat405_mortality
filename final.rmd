@@ -1,5 +1,5 @@
 ---
-title: "\\vspace{-2cm} Stat 405 Final"
+title: "Stat 405 Final"
 author: "Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, Aidan Gerber"
 date: "December 10th, 2022"
 fontsize: 12pt
@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  pdf_document:
-    default
-  # prettydoc::html_pretty:
-  #   toc: yes
-  #   toc_depth: 3
-  #   theme: hpstr
-  #   highlight: tango
-  #   df_print: paged
+  # pdf_document:
+  #   default
+  prettydoc::html_pretty:
+    toc: yes
+    toc_depth: 3
+    theme: hpstr
+    highlight: tango
+    df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -29,20 +29,18 @@ options(digits = 2)
 # knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, dev = 'png')
 # SHOW_BACK_TO_TOP=FALSE
 # for PDF no code
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", results = "hide", out.width = "100%", fig.align = "center", dpi = 300)
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", results = "hide", out.width = "100%", fig.align = "center", dpi = 300)
 # SHOW_BACK_TO_TOP <- FALSE
 # for html with svg
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
 # SHOW_BACK_TO_TOP=TRUE
 ```
-
 ```{r imports}
 library(tidyverse)
 library(RSQLite)
 library(grid)
 library(knitr)
 ```
-
 ```{r include-db, include = FALSE}
 db <- dbConnect(SQLite(), "data/mortality.sqlite")
 initRegExp(db)
@@ -53,8 +51,86 @@ query <- function(q) {
   results
 }
 ```
+```{r num-to-value, include=FALSE}
+manners <- list(
+  "1" = "Accident",
+  "2" = "Suicide",
+  "3" = "Homicide",
+  "4" = "Pending Investigation",
+  "5" = "Could Not Determine",
+  "6" = "Self-Inflicted",
+  "7" = "Natural",
+  "8" = "Not Specified"
+)
+
+ages <- list(
+  "1" = "Under 1 hour",
+  "2" = "1-23 hours",
+  "3" = "1 day",
+  "4" = "2 days",
+  "5" = "3 days",
+  "6" = "4 days",
+  "7" = "5 days",
+  "8" = "6 days",
+  "9" = "7-13 days",
+  "10" = "14-20 days",
+  "11" = "21-27 days",
+  "12" = "1 month",
+  "13" = "2 months",
+  "14" = "3 months",
+  "15" = "4 months",
+  "16" = "5 months",
+  "17" = "6 months",
+  "18" = "7 months",
+  "19" = "8 months",
+  "20" = "9 months",
+  "21" = "10 months",
+  "22" = "11 months",
+  "23" = "1 year",
+  "24" = "2 years",
+  "25" = "3 years",
+  "26" = "4 years",
+  "27" = "5-9 years",
+  "28" = "10-14 years",
+  "29" = "15-19 years",
+  "30" = "20-24 years",
+  "31" = "25-29 years",
+  "32" = "30-34 years",
+  "33" = "35-39 years",
+  "34" = "40-44 years",
+  "35" = "45-49 years",
+  "36" = "50-54 years",
+  "37" = "55-59 years",
+  "38" = "60-64 years",
+  "39" = "65-69 years",
+  "40" = "70-74 years",
+  "41" = "75-79 years",
+  "42" = "80-84 years",
+  "43" = "85-89 years",
+  "44" = "90-94 years",
+  "45" = "95-99 years",
+  "46" = "100-104 years",
+  "47" = "105-109 years",
+  "48" = "110-114 years",
+  "49" = "115-119 years",
+  "50" = "120-124 years",
+  "51" = "124+ years",
+  "52" = "Age not stated"
+)
+educations <- list(
+  "1" = "8th grade or less",
+  "2" = "9-12th grade, no diploma",
+  "3" = "High school graduate or GED",
+  "4" = "Some college credit, but no degree",
+  "5" = "Associate degree",
+  "6" = "Bachelor's degree",
+  "7" = "Master's degree",
+  "8" = "Doctorate or professional degree",
+  "9" = "Unknown"
+)
+```
 # Introduction
-⚠️ Spoiler Warning ⚠️
+Spoiler Warning
 Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to the palace. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
 Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics. 
 Cue [https://vid.puffyan.us/watch?v=yY7iGa4t9-I](epic) music.
@@ -62,39 +138,30 @@ Cue [https://vid.puffyan.us/watch?v=yY7iGa4t9-I](epic) music.
 ## Primary Dataset
 The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
 We made the decision to use the 2019 edition of the dataset since we did not want to focus on COVID-19. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
-In 2019, there were 2,861,523 deaths.
+In 2019, there were 2,861,523 deaths total. The following are the 20 most common groups split up by race, age, education, and sex
 ```{r}
-q <- query("select count(*) as count, race40, ager52, educ2003, sex from mortality group by race40, ager52, educ2003, sex order by count desc limit 15")
+q <- query(
+  "SELECT count(*) as count, race40, ager52, educ2003, sex
+  FROM mortality 
+  GROUP BY race40, ager52, educ2003, sex 
+  ORDER BY count DESC LIMIT 20"
+)
 races <- list(
   "1" = "White"
-)
-ages <- list(
-  "37" = "55-59",
-  "38" = "60-64",
-  "39" = "65-69",
-  "40" = "70-74",
-  "41" = "75-79",
-  "42" = "80-84",
-  "43" = "85-89",
-  "44" = "90-94",
-  "45" = "95-99"
-)
-educations <- list(
-  "3" = "High School Graduate or GED"
 )
 q %>% mutate(
   race = races[race40],
   age = ages[ager52],
   education = educations[educ2003]
 ) -> q
-kable(q %>% select(count, race, age, education))
+kable(q %>% select(count, race, age, education, sex))
 ```
 
 ## Secondary Dataset
-For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We will combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
+For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
 
 # Questions
-We are interested in what different factors are correlated with higher death rates based on cause of death, age groups, and weekdays. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
+We are interested in what different factors are correlated with higher death rates. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
 
 ## Killer
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
@@ -102,7 +169,7 @@ This plot demonstrates the most common manners of death among people in differen
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 ```
 ```{r shiny, include=FALSE}
-source("shiny.r", local = TRUE, print.eval = TRUE)
+# source("shiny.r", local = TRUE, print.eval = TRUE)
 ```
 
 # Exploration
