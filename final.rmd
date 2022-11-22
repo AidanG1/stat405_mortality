@@ -191,7 +191,7 @@ source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Age
-Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die.
+Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die. We also created a version of the plot scaled to bucket size. For privacy reasons, the NBER does not release ages of deaths but rather different buckets that the ages fall into. These bucket are of different lengths of time so we created a rescaled version. This plot was then put on a log scale to better showcase the data.
 
 ```{r plot_age_deaths, fig.height = 11, fig.width = 8}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
