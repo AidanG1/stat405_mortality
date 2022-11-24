@@ -1,4 +1,5 @@
-library(mgcv)
+library(rpart)
+library(rpart.plot)
 
 df <- query("SELECT mandeath, educ2003, monthdth, sex, ager52, ager27, placdth, marstat, weekday, injwork, methdisp, autopsy, ucr358, ucr113, ucr39, racer5,
     CASE WHEN record_1 IS NOT NULL AND record_1 <> '' THEN 1 ELSE 0 END +
@@ -49,6 +50,7 @@ df %>% mutate(
     is_not_specified = mandeath == "8"
 ) -> df
 
+df$mandeath <- as.factor(df$mandeath)
 df$sex <- as.factor(df$sex)
 df$educ2003 <- as.factor(df$educ2003)
 df$monthdth <- as.factor(df$monthdth)
@@ -117,14 +119,26 @@ ages_continuous <- list(
     "52" = 0
 )
 
-# fit_is_accident <- lm(is_accident ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + weekday + ucr39 + ager52 + marstat + racer5, data = df)
-
 df %>% mutate(ages_cont = ages_continuous[ager52]) -> df
 
 df$ages_cont <- as.numeric(df$ages_cont)
 
-df_small <- df[sample(nrow(df), 50000), ]
+df_small <- df[sample(nrow(df), 10000), ]
 
+## Tree
+tree <- rpart(mandeath~ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data=df_small, control=rpart.control(cp=.0001))
+printcp(tree, digits = 3)
+best <- tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
+pruned_tree <- prune(tree, cp=best)
+prp(pruned_tree,
+    faclen=0, #use full names for factor labels
+    extra=1, #display number of obs. for each terminal node
+    roundint=F, #don't round to integers in output
+    digits=5) #display 5 decimal places in output
+
+## Linear Models
+
+# fit_is_accident <- lm(is_accident ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + weekday + ucr39 + ager52 + marstat + racer5, data = df)
 fit_is_accident <- lm(is_accident ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data = df_small)
 fit_is_suicide <- lm(is_suicide ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data = df_small)
 fit_is_homicide <- lm(is_homicide ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data = df_small)

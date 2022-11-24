@@ -209,6 +209,7 @@ draw_table <<- function(grouping) {
         summarize(
             N = sum(count),
             `Average Record Count` = weighted.mean(avg_record_count, count)
+            
         )
     kable(table_df)
 }
