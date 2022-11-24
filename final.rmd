@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  pdf_document:
-    default
-  # prettydoc::html_pretty:
-  #   toc: yes
-  #   toc_depth: 3
-  #   theme: hpstr
-  #   highlight: tango
-  #   df_print: paged
+  # pdf_document:
+  #   default
+  prettydoc::html_pretty:
+    toc: yes
+    toc_depth: 3
+    theme: hpstr
+    highlight: tango
+    df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -24,110 +24,15 @@ header-includes: \usepackage{setspace}
 \doublespacing
 ```{r setup, include=FALSE}
 options(scipen = 999)
-options(digits = 2)
+options(digits = 4)
 # for PDF full
 # knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, dev = 'png')
-# SHOW_BACK_TO_TOP=FALSE
 # for PDF no code
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300)
-# SHOW_BACK_TO_TOP <- FALSE
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300)
 # for html with svg
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
-# SHOW_BACK_TO_TOP=TRUE
-```
-```{r imports}
-library(tidyverse)
-library(RSQLite)
-library(grid)
-library(knitr)
-```
-```{r include-db, include = FALSE}
-db <- dbConnect(SQLite(), "data/mortality.sqlite")
-initRegExp(db)
-query <- function(q) {
-  req <- dbSendQuery(db, q)
-  results <- dbFetch(req)
-  dbClearResult(req)
-  results
-}
-```
-```{r num-to-value, include=FALSE}
-manners <- list(
-  "1" = "Accident",
-  "2" = "Suicide",
-  "3" = "Homicide",
-  "4" = "Pending Investigation",
-  "5" = "Could Not Determine",
-  "6" = "Self-Inflicted",
-  "7" = "Natural",
-  "8" = "Not Specified"
-)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
 
-ages <- list(
-  "1" = "Under 1 hour",
-  "2" = "1-23 hours",
-  "3" = "1 day",
-  "4" = "2 days",
-  "5" = "3 days",
-  "6" = "4 days",
-  "7" = "5 days",
-  "8" = "6 days",
-  "9" = "7-13 days",
-  "10" = "14-20 days",
-  "11" = "21-27 days",
-  "12" = "1 month",
-  "13" = "2 months",
-  "14" = "3 months",
-  "15" = "4 months",
-  "16" = "5 months",
-  "17" = "6 months",
-  "18" = "7 months",
-  "19" = "8 months",
-  "20" = "9 months",
-  "21" = "10 months",
-  "22" = "11 months",
-  "23" = "1 year",
-  "24" = "2 years",
-  "25" = "3 years",
-  "26" = "4 years",
-  "27" = "5-9 years",
-  "28" = "10-14 years",
-  "29" = "15-19 years",
-  "30" = "20-24 years",
-  "31" = "25-29 years",
-  "32" = "30-34 years",
-  "33" = "35-39 years",
-  "34" = "40-44 years",
-  "35" = "45-49 years",
-  "36" = "50-54 years",
-  "37" = "55-59 years",
-  "38" = "60-64 years",
-  "39" = "65-69 years",
-  "40" = "70-74 years",
-  "41" = "75-79 years",
-  "42" = "80-84 years",
-  "43" = "85-89 years",
-  "44" = "90-94 years",
-  "45" = "95-99 years",
-  "46" = "100-104 years",
-  "47" = "105-109 years",
-  "48" = "110-114 years",
-  "49" = "115-119 years",
-  "50" = "120-124 years",
-  "51" = "124+ years",
-  "52" = "Age not stated"
-)
-educations <- list(
-  "1" = "8th grade or less",
-  "2" = "9-12th grade, no diploma",
-  "3" = "High school graduate or GED",
-  "4" = "Some college credit, but no degree",
-  "5" = "Associate degree",
-  "6" = "Bachelor's degree",
-  "7" = "Master's degree",
-  "8" = "Doctorate or professional degree",
-  "9" = "Unknown"
-)
+source("setup.r")
 ```
 # Introduction
 Spoiler Warning<br>
@@ -144,7 +49,7 @@ q <- query(
   "SELECT count(*) as count, race40, ager52, educ2003, sex
   FROM mortality 
   GROUP BY race40, ager52, educ2003, sex 
-  ORDER BY count DESC LIMIT 20"
+  ORDER BY count DESC LIMIT 10"
 )
 races <- list(
   "1" = "White"
@@ -163,14 +68,25 @@ For our secondary dataset, we are using the Behavioral Risk Factor Surveillance 
 # Questions
 We are interested in what different factors are correlated with higher death rates. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
 
-# Killer
+# Killer Plot
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
 ```{r plot_killer, fig.height = 7, fig.width = 10}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 draw_killer(person_colors, 1) # this variable is defined globally
+```
+
+Middle aged people have on average the most records.
+```{r table_age}
 draw_table(age)
+```
+Not many large differences
+```{r table_marstat}
 draw_table(marital_status)
+```
+Accidents have by far the most records and pending investigation by far the least
+```{r table_mandeath}
 draw_table(manner)
+```
 ```
 ```{r shiny, include=FALSE}
 # source("shiny.r", local = TRUE, print.eval = TRUE)
@@ -180,13 +96,13 @@ draw_table(manner)
 ## Deaths by Weekday
 First, we plotted weekday of death versus death counts. There were the most deaths on Tuesday. However, days have an average of `r query("SELECT count(*) FROM mortality")$count / 365` deaths and 2019 had an extra Tuesday so adjusting for that, the most deaths were on Fridays.
 
-```{r plot_weekday_deaths}
+```{r plot_weekday_deaths, fig.height = 11, fig.width = 8}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Month
 The most deaths occur in the coldest and darkest months of the year which are February, January, December, and March. Summer months have lower deaths by around 10-11%. 
-```{r plot_month_deaths}
+```{r plot_month_deaths, fig.height = 11, fig.width = 8}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 ```
 
@@ -218,7 +134,7 @@ source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 
 ## Free Text Analysis: Selected Health Conditions by Age Group
 Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
-```{r plot_conditions_text, fig.height = 7, fig.width = 8}
+```{r plot_conditions_text, fig.height = 11, fig.width = 8}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 

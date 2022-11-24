@@ -9,8 +9,8 @@ cancer$Break_Out <- as.factor(cancer$Break_Out)
 
 ggplot(cancer, aes(group = Question)) +
     geom_line(aes(x = Break_Out, y = avg_data, color = Question, size = I(2))) +
+    ggtitle("Conditions by Age Group") +
     labs(
-        title = "Conditions by Age Group",
         x = "Age Group", y = "Percent of Age Group"
     ) +
     theme(

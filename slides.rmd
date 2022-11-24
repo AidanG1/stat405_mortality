@@ -1,0 +1,51 @@
+---
+title: "Star 405 Mortality"
+author: Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, Aidan Gerber
+date: November 23, 2022
+output: ioslides_presentation
+---
+```{r setup, include=FALSE}
+source("setup.r")
+```
+
+# Data
+
+## Data Introduction
+
+## Secondary Dataset
+
+# Questions
+
+## Given someone is dead, how did they die?
+
+## Hypothesis + More Questions
+
+# Exploration & Methods
+
+---
+
+```{r, weekday_deaths, fig.cap="caption", echo=FALSE}
+source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
+```
+
+---
+
+```{r, months_deaths, fig.cap="caption", echo=FALSE}
+source("plots/month_count.r", local = TRUE, print.eval = TRUE)
+```
+
+---
+
+```{r, killer, fig.cap="caption", echo=FALSE}
+source("plots/killer.r", local = TRUE, print.eval = TRUE)
+```
+
+# Analysis
+
+---
+
+```{r, cancer, fig.cap="caption", echo=FALSE}
+source("plots/cancer.r", local = TRUE, print.eval = TRUE)
+```
+
+

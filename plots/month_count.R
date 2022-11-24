@@ -30,15 +30,15 @@ names <- c(
     "December"
 )
 
-month_counts %>% mutate(count = count / days[monthdth], monthdth_name = names[monthdth]) -> month_counts
+month_counts %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth]) -> month_counts
 month_counts$monthdth_name <- factor(month_counts$monthdth_name, levels = month_counts$monthdth_name[order(month_counts$monthdth)])
 
 ggplot(month_counts) +
-    geom_bar(aes(x = monthdth_name, weight = count, fill = monthdth_name)) +
+    geom_bar(aes(x = monthdth_name, weight = count_scaled, fill = monthdth_name)) +
     labs(
-        title = "Deaths per Day in Month",
         x = "Month", y = "Deaths per day"
     ) +
+    ggtitle("Deaths per Day in Month") +
     theme(
         axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
     ) +

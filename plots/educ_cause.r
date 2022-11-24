@@ -71,8 +71,8 @@ educ_cause %>% mutate(
 
 ggplot(educ_cause) +
     geom_count(aes(y = cause, x = education, size = prop, color = educ2003)) +
+    ggtitle("Cause of Death by Education Level") + 
     labs(
-        title = "Cause of Death by Education Level",
         x = "Education Level",
         y = "Cause of Death"
     ) +
