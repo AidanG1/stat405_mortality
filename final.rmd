@@ -43,7 +43,7 @@ Cue [epic](https://vid.puffyan.us/watch?v=yY7iGa4t9-I) music.
 ## Primary Dataset
 The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
 We made the decision to use the 2019 edition of the dataset since we did not want to focus on COVID-19. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
-In 2019, there were 2,861,523 deaths total. The following are the 20 most common groups split up by race, age, education, and sex
+In 2019, there were 2,861,523 deaths total. The following are the 10 most common groups split up by race, age, education, and sex
 ```{r}
 q <- query(
   "SELECT count(*) as count, race40, ager52, educ2003, sex
