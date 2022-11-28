@@ -231,7 +231,7 @@ person_colors <<- c(
     "#aec489"
 )
 
-draw_killer <<- function(person_colors, scale) {
+draw_killer <<- function(person_colors, scale = 1) {
     # print("Draw Killer")
     grid.newpage()
     pushViewport(viewport(

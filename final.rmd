@@ -98,6 +98,8 @@ First, we plotted weekday of death versus death counts. There were the most deat
 
 ```{r plot_weekday_deaths, fig.height = 11, fig.width = 8}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
+deaths_by_day_plot()
+deaths_by_day_plot_scaled()
 ```
 
 ## Deaths by Month

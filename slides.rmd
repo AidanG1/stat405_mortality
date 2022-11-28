@@ -1,5 +1,5 @@
 ---
-title: "Star 405 Mortality"
+title: Stat 405 Mortality
 author: Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, Aidan Gerber
 date: November 23, 2022
 output: ioslides_presentation
@@ -26,6 +26,13 @@ source("setup.r")
 
 ```{r, weekday_deaths, fig.cap="caption", echo=FALSE}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
+deaths_by_day_plot()
+```
+
+---
+
+```{r weekday_deaths_scaled, fig.cap="caption", echo=FALSE}
+deaths_by_day_plot_scaled()
 ```
 
 ---
@@ -38,6 +45,8 @@ source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 
 ```{r, killer, fig.cap="caption", echo=FALSE}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
+
+draw_killer(person_colors)
 ```
 
 # Analysis

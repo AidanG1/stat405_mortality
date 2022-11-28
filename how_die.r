@@ -126,7 +126,7 @@ df$ages_cont <- as.numeric(df$ages_cont)
 df_small <- df[sample(nrow(df), 10000), ]
 
 ## Tree
-tree <- rpart(mandeath~ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data=df_small, control=rpart.control(cp=.0001))
+tree <- rpart(mandeath~ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data=df_small, control=rpart.control(cp=.001))
 printcp(tree, digits = 3)
 best <- tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
 pruned_tree <- prune(tree, cp=best)
