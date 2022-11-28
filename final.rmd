@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  # pdf_document:
-  #   default
-  prettydoc::html_pretty:
-    toc: yes
-    toc_depth: 3
-    theme: hpstr
-    highlight: tango
-    df_print: paged
+  pdf_document:
+    default
+  # prettydoc::html_pretty:
+  #   toc: yes
+  #   toc_depth: 3
+  #   theme: hpstr
+  #   highlight: tango
+  #   df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -28,9 +28,9 @@ options(digits = 4)
 # for PDF full
 # knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, dev = 'png')
 # for PDF no code
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300)
 # for html with svg
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%")
 
 source("setup.r")
 ```
@@ -106,6 +106,15 @@ deaths_by_day_plot_scaled()
 The most deaths occur in the coldest and darkest months of the year which are February, January, December, and March. Summer months have lower deaths by around 10-11%. 
 ```{r plot_month_deaths, fig.height = 11, fig.width = 8}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
+
+month_count_plot(df_month_counts)
+```
+
+Interestingly, the large number of deaths in the winter months and lower numbers is summer can be entirely explained by natural causes deaths. Since most deaths are due to natural causes, even a small increase in deaths due to natural causes can have a large impact on the total number of deaths. The reasoning for increased deaths due to natural causes in winter months is becauase people spend more time inside with cold weather which leads to increased disease transmission.
+```{r plot_month_manner, fig.height = 11, fig.width = 8}
+month_count_table()
+month_count_plot(df_month_counts_filtered, "Deaths per Day in Month Excluding Natural Causes")
+source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Age

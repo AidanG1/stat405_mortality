@@ -40,17 +40,15 @@ manner_names <- unlist(lapply(
     }
 ))
 
-manner_names
-
 month_counts$manner_name <- manner_names
 
 month_counts$monthdth_name <- factor(month_counts$monthdth_name, levels = unique(month_counts$monthdth_name[order(month_counts$monthdth)]))
 
-ggplot(month_counts, aes(x = monthdth, y = count_scaled, group = mandeath, color = manner_name)) +
-    geom_line()
+# ggplot(month_counts, aes(x = monthdth, y = count_scaled, group = mandeath, color = manner_name)) +
+#     geom_line()
 
-ggplot(month_counts %>% filter(mandeath == 3), aes(x = monthdth, y = count_scaled)) +
-    geom_line()
+# ggplot(month_counts %>% filter(mandeath == 3), aes(x = monthdth, y = count_scaled)) +
+#     geom_line()
 
 ggplot(month_counts, aes(monthdth, count_scaled, color = manner_name)) +
     geom_line() +

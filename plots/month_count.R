@@ -1,4 +1,6 @@
-month_counts <- query("select monthdth, count(*) as count from mortality group by monthdth order by monthdth;")
+df_month_counts <<- query("select monthdth, count(*) as count from mortality group by monthdth order by monthdth;")
+
+df_month_counts_filtered <<- query("select monthdth, count(*) as count from mortality where mandeath != 7 group by monthdth order by monthdth;")
 
 days <- c(
     31, # J
@@ -30,16 +32,24 @@ names <- c(
     "December"
 )
 
-month_counts %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth]) -> month_counts
-month_counts$monthdth_name <- factor(month_counts$monthdth_name, levels = month_counts$monthdth_name[order(month_counts$monthdth)])
+month_count_plot <<- function(df, title = "Deaths per Day in Month") {
+    df %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth]) -> df
+    df$monthdth_name <- factor(df$monthdth_name, levels = df$monthdth_name[order(df$monthdth)])
 
-ggplot(month_counts) +
-    geom_bar(aes(x = monthdth_name, weight = count_scaled, fill = monthdth_name)) +
-    labs(
-        x = "Month", y = "Deaths per day"
-    ) +
-    ggtitle("Deaths per Day in Month") +
-    theme(
-        axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
-    ) +
-    scale_fill_discrete(guide = "none")
+    ggplot(df) +
+        geom_bar(aes(x = monthdth_name, weight = count_scaled, fill = monthdth_name)) +
+        labs(
+            x = "Month", y = "Deaths per day"
+        ) +
+        ggtitle(title) +
+        theme(
+            axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
+        ) +
+        scale_fill_discrete(guide = "none")
+}
+
+month_count_table <<- function() {
+    months_counts <- df_month_counts %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth])
+    months_counts_filtered <- df_month_counts_filtered %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth])
+    merge(months_counts, months_counts_filtered, by = "monthdth_name") %>% select(monthdth_name, count_scaled.x, count_scaled.y) %>% rename("Month" = monthdth_name, "Death Count" = count_scaled.x, "Death Count Excluding Natural" = count_scaled.y) %>% kable()
+}
