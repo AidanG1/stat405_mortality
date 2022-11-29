@@ -27,57 +27,27 @@ df$avg_record_count <- as.numeric(df$avg_record_count)
 
 df$mandeath[is.na(df$mandeath)] <- 8
 
-df %>% mutate(
-    is_accident = mandeath == "1",
-    is_suicide = mandeath == "2",
-    is_homicide = mandeath == "3",
-    is_pending_investigation = mandeath == "4",
-    is_cnd = mandeath == "5",
-    is_self_inflicted = mandeath == "6",
-    is_natural = mandeath == "7",
-    is_not_specified = mandeath == "8"
-) -> df
+df %>% mutate(manner_ = as.character(mandeath),
+            age_ = as.character(ager52),
+            educ_ = as.character(educ2003),
+            place_ = as.character(placdth),
+            race_ = as.character(racer5),
+            is_accident = mandeath == "1",
+            is_suicide = mandeath == "2",
+            is_homicide = mandeath == "3",
+            is_pending_investigation = mandeath == "4",
+            is_cnd = mandeath == "5",
+            is_self_inflicted = mandeath == "6",
+            is_natural = mandeath == "7",
+            is_not_specified = mandeath == "8") %>% 
+       rowwise() %>% 
+       mutate(manner_name = manners[[manner_]],
+                 age = ages[[age_]],
+                 education = educations[[educ_]],
+                 place = places[[place_]],
+                 race = races[[race_]]) %>%
+       select(!ends_with("_")) -> df 
 
-manner_names <- unlist(lapply(
-    df$mandeath,
-    function(x) {
-        manners[[paste0(x)]]
-    }
-))
-
-age_names <- unlist(lapply(
-    df$ager52,
-    function(x) {
-        ages[[paste0(x)]]
-    }
-))
-
-education_names <- unlist(lapply(
-    df$educ2003,
-    function(x) {
-        educations[[paste0(x)]]
-    }
-))
-
-place_names <- unlist(lapply(
-    df$placdth,
-    function(x) {
-        places[[paste0(x)]]
-    }
-))
-
-race_names <- unlist(lapply(
-    df$racer5,
-    function(x) {
-        races[[paste0(x)]]
-    }
-))
-
-df$manner_name <- manner_names
-df$age <- age_names
-df$education <- education_names
-df$place <- place_names
-df$race <- race_names
 df$manner_name <- as.factor(df$manner_name)
 df$mandeath <- as.factor(df$mandeath)
 df$sex <- as.factor(df$sex)
