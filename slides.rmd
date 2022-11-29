@@ -13,8 +13,19 @@ source("setup.r")
 # Data
 
 ## Data Introduction
+- Gathered from the National Bureau of Economic Research, who creates and distributes a dataset of US mortality for every year since 1959
+- Each row represents a single death, while each column represents a different demographic characteristic of the deceased.
+- Used the 2019 edition of the dataset since we did not want to focus on COVID-19
+- Important information includes education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different - risk factors for each deceased individual
+
 
 ## Secondary Dataset
+- Using Behavioral Risk Factor Surveillance System Survey
+- Includes different free text survey questions from across the United States and territories with responses broken out by subgroup
+    -- Includes questions on demographic characteristics, plus queries on current health behaviors, such as tobacco use and seatbelt use
+- Combined the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset 
+    -- Tried to use aggregate statistics to analyze how risk factors can be matched with causes of death.
+
 
 # Questions
 

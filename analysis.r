@@ -169,7 +169,7 @@ run_random_forest <<- function() {
     confMat <- table(test$manner_name, t_pred)
     accuracy <- sum(diag(confMat)) / sum(confMat)
     endTime <- Sys.time()
-    print(endTime - startTime)
+    # print(endTime - startTime)
     accuracy
 }
 
@@ -197,7 +197,7 @@ run_decision_tree <<- function() {
     confMat <- table(test$`Manner of Death`, t_pred)
     accuracy <- sum(diag(confMat)) / sum(confMat)
     endTime <- Sys.time()
-    print(endTime - startTime)
+    # print(endTime - startTime)
     accuracy
 }
 
