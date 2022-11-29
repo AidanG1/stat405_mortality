@@ -70,7 +70,7 @@ We are interested in what different factors are correlated with higher death rat
 
 # Killer Plot
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
-```{r plot_killer, fig.height = 7, fig.width = 10}
+```{r plot_killer, fig.height = 5, fig.width = 8}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 draw_killer(person_colors, 1) # this variable is defined globally
 ```
@@ -96,7 +96,7 @@ draw_table(manner)
 ## Deaths by Weekday
 First, we plotted weekday of death versus death counts. There were the most deaths on Tuesday. However, days have an average of `r query("SELECT count(*) FROM mortality")$count / 365` deaths and 2019 had an extra Tuesday so adjusting for that, the most deaths were on Fridays.
 
-```{r plot_weekday_deaths, fig.height = 11, fig.width = 8}
+```{r plot_weekday_deaths, fig.height = 5, fig.width = 8}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 deaths_by_day_plot()
 deaths_by_day_plot_scaled()
@@ -104,14 +104,14 @@ deaths_by_day_plot_scaled()
 
 ## Deaths by Month
 The most deaths occur in the coldest and darkest months of the year which are February, January, December, and March. Summer months have lower deaths by around 10-11%. 
-```{r plot_month_deaths, fig.height = 11, fig.width = 8}
+```{r plot_month_deaths, fig.height = 5, fig.width = 8}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 
 month_count_plot(df_month_counts)
 ```
 
 Interestingly, the large number of deaths in the winter months and lower numbers is summer can be entirely explained by natural causes deaths. Since most deaths are due to natural causes, even a small increase in deaths due to natural causes can have a large impact on the total number of deaths. The reasoning for increased deaths due to natural causes in winter months is becauase people spend more time inside with cold weather which leads to increased disease transmission.
-```{r plot_month_manner, fig.height = 11, fig.width = 8}
+```{r plot_month_manner, fig.height = 5, fig.width = 8}
 month_count_table()
 month_count_plot(df_month_counts_filtered, "Deaths per Day in Month Excluding Natural Causes")
 source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
@@ -120,32 +120,32 @@ source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
 ## Deaths by Age
 Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die. We also created a version of the plot scaled to bucket size. For privacy reasons, the NBER does not release ages of deaths but rather different buckets that the ages fall into. These bucket are of different lengths of time so we created a rescaled version. This plot was then put on a log scale to better showcase the data.
 
-```{r plot_age_deaths, fig.height = 11, fig.width = 8}
+```{r plot_age_deaths, fig.height = 5, fig.width = 8}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Manner
 Here, we plotted the manner of death versus age and counted how many people of a certain aged died based on a certain manner of death. A few key finding of this analysis shows that the majority of people die from natural causes, especially those aged 60+ and less than 1 day old, and accidental causes, spanning across all age groups. What this plot may help to inform us about is the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental related deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death among the different age groups, and further promote research in what actual activities people are participating in that lead to their manner of death.
 
-```{r plot_age_manner, fig.height = 11, fig.width = 8}
+```{r plot_age_manner, fig.height = 5, fig.width = 8}
 source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Deaths by Age and Gender
 In this plot, we plotted the number of deaths versus age ranges while demonstrating how many men compared to women passed away in each age category. In each of the bars, the red fill represents the amount of women who passed away in that particular age range while the blue accounts for the amount of men. The percentage seen in each bar represents the proportion of men in a given age range that passed away. This analysis shows that the majority of people under the age of 80 who pass away tend to be men, as nearly every bar from ages 0-80 shows the proportion of male deaths to be above 50%. This proportion of male deaths goes down after 80 years of age, and is likely because women who are of an older age tend to live to a complete life expectancy. What this plot may help to inform us about is the differences in male and females lives and life expectancies. Further research into differences in lifestyle choices for men versus women as a whole may help better explain why women tend to live longer than men. Furthermore, this plot accompanied with a plot on cause of death by gender, may assist in determining what kind of, potentially more risky, behaviors men may partake in during their lifetimes that lead to an earlier death than women.
-```{r plot_age_gender, fig.height = 11, fig.width = 8}
+```{r plot_age_gender, fig.height = 5, fig.width = 8}
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Cause of Death by Education
 For most causes of death, level of education does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurrences in those with 8th grade or less education and those with unknown education and nearly no occurrences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing proportions. "Syphilis" has a quite small sample size but unknown education has the highest mortality proportion. For "Assault (homicide)", 9 - 12th grade, no diploma has the highest mortality proportion.
-```{r plot_education_cause, fig.height = 11, fig.width = 8}
+```{r plot_education_cause, fig.height = 5, fig.width = 8}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 ```
 
 ## Free Text Analysis: Selected Health Conditions by Age Group
 Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
-```{r plot_conditions_text, fig.height = 11, fig.width = 8}
+```{r plot_conditions_text, fig.height = 5, fig.width = 8}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 

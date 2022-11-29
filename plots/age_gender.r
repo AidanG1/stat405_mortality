@@ -14,14 +14,14 @@ sr <- (deaths_by_age_sex %>% filter(sex == "M") %>% select(count) / (deaths_by_a
 s_labels <- c()
 
 for (val in sr) {
-    s_labels <- c(s_labels, paste0(round(val, digits = 4), "%"), '')
+    s_labels <- c(s_labels, paste0(round(val, digits = 4), "%"), "")
 }
 
 ggplot(deaths_by_age_sex, aes(
     x = age, y = count, fill = sex
 )) +
     geom_bar(stat = "identity") +
-    geom_text(aes(label = s_labels), hjust=-0.1, angle = 90) +
+    geom_text(aes(y = 1, label = s_labels), hjust = -0.1, angle = 90) +
     labs(x = "Age Range", y = "Number of Deaths") +
     ggtitle("Deaths by Age on a Log Scale with Percent Male") +
     theme(

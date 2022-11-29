@@ -1,3 +1,5 @@
+# source("setup.r")
+
 library(rpart)
 library(rpart.plot)
 
@@ -50,6 +52,15 @@ df %>% mutate(
     is_not_specified = mandeath == "8"
 ) -> df
 
+manner_names <- unlist(lapply(
+    df$mandeath,
+    function(x) {
+        manners[[paste0(x)]]
+    }
+))
+
+df$manner_name <- manner_names
+df$manner_name <- as.factor(df$manner_name)
 df$mandeath <- as.factor(df$mandeath)
 df$sex <- as.factor(df$sex)
 df$educ2003 <- as.factor(df$educ2003)
@@ -123,19 +134,42 @@ df %>% mutate(ages_cont = ages_continuous[ager52]) -> df
 
 df$ages_cont <- as.numeric(df$ages_cont)
 
-df_small <- df[sample(nrow(df), 10000), ]
+# vars: ages_cont: continuous
+#       avg_record_count: continuous
+#       sex: 2 levels
+#       educ2003: 9 levels
+#       monthdth: 12 levels
+#       placdth: 8 levels
+#       weekday: 7 levels
+#       ucr358: 347 levels
+#       ucr113: 112 levels
+#       ucr39: 39 levels
+#       ager27: 27 levels
+#       marstat: 5 levels
+#       racer5: 4 levels
 
 ## Tree
-tree <- rpart(mandeath~ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + ucr39 + marstat + racer5, data=df_small, control=rpart.control(cp=.001))
-printcp(tree, digits = 3)
-best <- tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
-pruned_tree <- prune(tree, cp=best)
+trainIndex  <- sample(1:nrow(df), 0.8 * nrow(df))
+train <- df[trainIndex,]
+test <- df[-trainIndex,]
+startTime <- Sys.time()
+tree <- rpart(manner_name ~ ages_cont + avg_record_count + sex + educ2003 + placdth + marstat + racer5, data = train, control = rpart.control(cp = .001)) # to make model more accurate, can add in monthdth and ucr39 and decrease cp
+endTime <- Sys.time()
+print(endTime - startTime)
+# printcp(tree, digits = 3)
+best <- tree$cptable[which.min(tree$cptable[, "xerror"]), "CP"]
+pruned_tree <- prune(tree, cp = best)
 prp(pruned_tree,
-    faclen=0, #use full names for factor labels
-    extra=1, #display number of obs. for each terminal node
-    roundint=F, #don't round to integers in output
-    digits=5) #display 5 decimal places in output
+    faclen = 0, # use full names for factor labels
+    extra = 1, # display number of obs. for each terminal node
+    roundint = F, # don't round to integers in output
+    digits = 4
+) # display 5 decimal places in output
 
+t_pred <- predict(tree, test, type = "class")
+confMat <- table(test$manner_name, t_pred)
+accuracy <- sum(diag(confMat)) / sum(confMat)
+accuracy
 ## Linear Models
 
 # fit_is_accident <- lm(is_accident ~ ages_cont + avg_record_count + sex + educ2003 + monthdth + placdth + weekday + ucr39 + ager52 + marstat + racer5, data = df)
@@ -163,4 +197,3 @@ sum(df_small$is_natural)
 summary(fit_natural)$adj.r.squared
 sum(df_small$is_not_specified)
 summary(fit_not_specified)$adj.r.squared
-
