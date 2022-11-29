@@ -84,7 +84,7 @@ The following table displays the average number of records for deaths in the giv
 ```{r table_marstat}
 draw_table(marital_status)
 ```
-Accidents have by far the most records and pending investigation by far the least
+The following table displays the average number of records for deaths by manner of death. Most manner of death groups die with about 3 records. The average is much lower for "Pending Investigation", with an average of 1.311. The highest average record is for the manner of death "Accident" with an average of 4.005. Every other manner of death yields an average record count close to 3.
 ```{r table_mandeath}
 draw_table(manner)
 ```
