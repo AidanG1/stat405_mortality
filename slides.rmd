@@ -2,7 +2,9 @@
 title: Stat 405 Mortality
 author: Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, Aidan Gerber
 date: November 23, 2022
-output: ioslides_presentation
+output:
+    ioslides_presentation:
+        widescreen: true
 ---
 ```{r setup, include=FALSE}
 source("setup.r")
@@ -39,6 +41,19 @@ deaths_by_day_plot_scaled()
 
 ```{r, months_deaths, fig.cap="caption", echo=FALSE}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
+```
+
+---
+
+```{r, educ_cause, echo=FALSE, fig.width=10, fig.height = 6}
+source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
+plot_educ_cause()
+```
+
+## Table {.smaller}
+
+```{r, educ_cause_table, echo=FALSE}
+educ_cause_table()
 ```
 
 ---

@@ -69,22 +69,30 @@ educ_cause %>% mutate(
     prop = unname(count / totals[educ2003])
 ) -> educ_cause
 
-ggplot(educ_cause) +
-    geom_count(aes(y = cause, x = education, size = prop, color = educ2003)) +
-    ggtitle("Cause of Death by Education Level") + 
-    labs(
-        x = "Education Level",
-        y = "Cause of Death"
-    ) +
-    theme(
-        axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
-    ) +
-    guides(size = guide_legend(
-        title = "Proportion",
-        override.aes = list(color = "#56B1F7")
-    )) +
-    scale_color_gradient(guide = "none") +
-    scale_x_discrete(limits = education_tags)
+plot_educ_cause <- function() {
+    educ_cause %>% mutate(cause = str_trunc(cause, 23)) %>% 
+    ggplot() +
+        geom_count(aes(y = cause, x = education, size = prop, color = educ2003)) +
+        ggtitle("Cause of Death by Education Level") + 
+        labs(
+            x = "Education Level",
+            y = "Cause of Death"
+        ) +
+        theme(
+            axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)
+        ) +
+        guides(size = guide_legend(
+            title = "Proportion",
+            override.aes = list(color = "#56B1F7")
+        )) +
+        scale_color_gradient(guide = "none") +
+        scale_x_discrete(limits = education_tags)
+}
+
+educ_cause_table <- function() {
+    educ_cause %>% select(education, cause, prop) %>% spread(education, prop) %>% 
+        kable()
+}
 
 # get the biggest disease outliers by education
 # View(educ_cause %>% group_by(ucr39) %>% summarise((quantile(prop, 0.75) - quantile(prop, 0.25)) / median(prop), (max(prop) - min(prop)) / median(prop)))
