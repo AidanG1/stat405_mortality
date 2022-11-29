@@ -168,7 +168,7 @@ source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 source("analysis.r", local = TRUE)
 accuracy <- run_decision_tree()
 ```
-The decision tree predicts with `r 100 * accuracy`% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable.
+The decision tree predicts with `r 100 * accuracy`% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable. Each leaf contains the classified manner of death and 7 numbers. Each of the 7 numbers corresponds to the count of each manner that was classified to that. The first number is accident, second is suicide, third is homicide, fourth is pending investigation, fifth is could not determine, sixth is natural, and seventh is not specified.
 
 ```{r disconnect-db, include = FALSE}
 dbDisconnect(db)
