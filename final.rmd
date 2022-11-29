@@ -75,11 +75,12 @@ source("plots/killer.r", local = TRUE, print.eval = TRUE)
 draw_killer(person_colors, 1) # this variable is defined globally
 ```
 
-Middle aged people have on average the most records.
+
+The following table displays the average number of records for deaths in the given age ranges. Most age groups die with about 3 records. The average gets lower for younger age groups and older age groups, peaking in the middle age ranges. The age range with the highest record average is 25-34 years with an average record count of 3.304. 
 ```{r table_age}
 draw_table(age)
 ```
-Not many large differences
+The following table displays the average number of records for deaths in the given marital statuses. The average record count for all groups is around 3.1. There is not much variation by group, and the marital status with the highest record count is "Marital status unknown" with an average record count of 3.257. The range of these averages is 0.226, so there is very little variation by marital status.
 ```{r table_marstat}
 draw_table(marital_status)
 ```
