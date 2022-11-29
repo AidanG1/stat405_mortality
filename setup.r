@@ -90,3 +90,22 @@ educations <<- list(
     "8" = "Doctorate or professional degree",
     "9" = "Unknown"
 )
+
+places <<- list(
+    "1" = "Hospital - Inpatient",
+    "2" = "Hospital - Outpatient",
+    "3" = "Hospital - Dead on Arrival",
+    "4" = "Decedent's home",
+    "5" = "Hospice facility",
+    "6" = "Nursing home/long term care",
+    "7" = "Other",
+    "9" = "Place of death unknown"
+)
+
+races <<- list(
+    "0" = "Other (Puerto Rico Only)",
+    "1" = "White",
+    "2" = "Black",
+    "3" = "American Indian",
+    "4" = "Asian or Pacific Islander"
+)
