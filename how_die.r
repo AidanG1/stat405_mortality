@@ -23,7 +23,7 @@ df <- query("SELECT mandeath, educ2003, monthdth, sex, ager52, ager27, placdth, 
         CASE WHEN record_17 IS NOT NULL AND record_17 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_18 IS NOT NULL AND record_18 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_19 IS NOT NULL AND record_19 <> '' THEN 1 ELSE 0 END +
-    CASE WHEN record_20 IS NOT NULL THEN 1 ELSE 0 END AS avg_record_count
+        CASE WHEN record_20 IS NOT NULL THEN 1 ELSE 0 END AS avg_record_count
      FROM mortality")
 
 df$avg_record_count <- as.numeric(df$avg_record_count)
@@ -149,11 +149,12 @@ df$ages_cont <- as.numeric(df$ages_cont)
 #       racer5: 4 levels
 
 ## Tree
-trainIndex  <- sample(1:nrow(df), 0.8 * nrow(df))
-train <- df[trainIndex,]
-test <- df[-trainIndex,]
+trainIndex <- sample(1:nrow(df), 0.8 * nrow(df))
+train <- df[trainIndex, ]
+test <- df[-trainIndex, ]
 startTime <- Sys.time()
-tree <- rpart(manner_name ~ ages_cont + avg_record_count + sex + educ2003 + placdth + marstat + racer5, data = train, control = rpart.control(cp = .001)) # to make model more accurate, can add in monthdth and ucr39 and decrease cp
+# tree <- rpart(manner_name ~ ages_cont + avg_record_count + sex + educ2003 + placdth + marstat + racer5, data = train, control = rpart.control(cp = .001)) # to make model more accurate, can add in monthdth and ucr39 and decrease cp
+tree <- rpart(manner_name ~ ages_cont + avg_record_count + ucr39 + monthdth + placdth + racer5, data = train, control = rpart.control(cp = .001))
 endTime <- Sys.time()
 print(endTime - startTime)
 # printcp(tree, digits = 3)
