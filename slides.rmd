@@ -72,6 +72,13 @@ source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
 plotter(month_manner_plot())
 ```
 
+---
+
+```{r plot_age_deaths}
+source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
+plotter(deaths_by_age_plot_scaled())
+```
+
 --- 
 
 ```{r plot_age_gender, fig.cap="caption"}

@@ -1,6 +1,7 @@
 # source("setup.r")
 
-df <- query("SELECT mandeath, educ2003, monthdth, sex, ager52, ager27, placdth, marstat, weekday, injwork, methdisp, autopsy, ucr358, ucr113, ucr39, racer5,
+df <- query(
+    "SELECT mandeath, educ2003, monthdth, sex, ager52, ager27, placdth, marstat, weekday, injwork, methdisp, autopsy, ucr358, ucr113, ucr39, racer5,
     CASE WHEN record_1 IS NOT NULL AND record_1 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_2 IS NOT NULL AND record_2 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_3 IS NOT NULL AND record_3 <> '' THEN 1 ELSE 0 END +
@@ -21,7 +22,8 @@ df <- query("SELECT mandeath, educ2003, monthdth, sex, ager52, ager27, placdth, 
         CASE WHEN record_18 IS NOT NULL AND record_18 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_19 IS NOT NULL AND record_19 <> '' THEN 1 ELSE 0 END +
         CASE WHEN record_20 IS NOT NULL THEN 1 ELSE 0 END AS avg_record_count
-     FROM mortality")
+     FROM mortality"
+)
 
 df$avg_record_count <- as.numeric(df$avg_record_count)
 
