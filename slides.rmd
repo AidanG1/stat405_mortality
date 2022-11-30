@@ -46,20 +46,20 @@ plotter <- function(p) {
 
 ---
 
-```{r, weekday_deaths, fig.cap="caption"}
+```{r, weekday_deaths}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
 plotter(deaths_by_day_plot())
 ```
 
 ---
 
-```{r weekday_deaths_scaled, fig.cap="caption"}
+```{r weekday_deaths_scaled}
 plotter(deaths_by_day_plot_scaled())
 ```
 
 ---
 
-```{r, months_deaths, fig.cap="caption"}
+```{r, months_deaths}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 
 plotter(month_count_plot(df_month_counts))
@@ -67,7 +67,7 @@ plotter(month_count_plot(df_month_counts))
 
 ---
 
-```{r, month_manner, fig.cap="caption"}
+```{r, month_manner}
 source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
 plotter(month_manner_plot())
 ```
@@ -81,14 +81,14 @@ plotter(deaths_by_age_plot_scaled())
 
 --- 
 
-```{r plot_age_gender, fig.cap="caption"}
+```{r plot_age_gender}
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 plotter(deaths_by_age_gender_plot())
 ```
 
 ---
 
-```{r, educ_cause}
+```{r, educ_cause, fig.height = 5.5}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
 plotter(educ_cause_plot())
 ```
@@ -101,7 +101,7 @@ educ_cause_table()
 
 ---
 
-```{r killer, fig.cap="Killer Plot"}
+```{r killer}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 # source("shiny.r", local = TRUE, print.eval = TRUE)
 
@@ -112,7 +112,7 @@ draw_killer(person_colors)
 
 ---
 
-```{r cancer, fig.cap="Free Text"}
+```{r cancer}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 plotter(cancer_free_text_plot())
 ```
