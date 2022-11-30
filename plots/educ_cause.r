@@ -70,10 +70,10 @@ educ_cause %>% mutate(
 ) -> educ_cause
 
 plot_educ_cause <- function() {
-    educ_cause %>% mutate(cause = str_trunc(cause, 23)) %>% 
+    educ_cause %>% mutate(cause = str_trunc(cause, 23)) %>%
     ggplot() +
         geom_count(aes(y = cause, x = education, size = prop, color = educ2003)) +
-        ggtitle("Cause of Death by Education Level") + 
+        ggtitle("Cause of Death by Education Level") +
         labs(
             x = "Education Level",
             y = "Cause of Death"
@@ -90,8 +90,8 @@ plot_educ_cause <- function() {
 }
 
 educ_cause_table <- function() {
-    educ_cause %>% select(education, cause, prop) %>% spread(education, prop) %>% 
-        kable()
+    educ_cause %>% select(education, cause, prop) %>% spread(education, prop) %>%
+        slice(4, 5, 6, 16, 19, 36) %>% kable()
 }
 
 # get the biggest disease outliers by education

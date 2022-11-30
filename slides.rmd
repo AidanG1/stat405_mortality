@@ -92,6 +92,7 @@ accuracy <- run_decision_tree()
 ---
 
 ```{r analysis_random_forest, fig.cap="Random Forest", echo=FALSE}
-accuracy <- run_random_forest()
+## accuracy <- run_random_forest()
 ```
+TODO: fix random forest.
 `r accuracy`%
