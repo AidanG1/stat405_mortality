@@ -27,26 +27,31 @@ df$avg_record_count <- as.numeric(df$avg_record_count)
 
 df$mandeath[is.na(df$mandeath)] <- 8
 
-df %>% mutate(manner_ = as.character(mandeath),
-            age_ = as.character(ager52),
-            educ_ = as.character(educ2003),
-            place_ = as.character(placdth),
-            race_ = as.character(racer5),
-            is_accident = mandeath == "1",
-            is_suicide = mandeath == "2",
-            is_homicide = mandeath == "3",
-            is_pending_investigation = mandeath == "4",
-            is_cnd = mandeath == "5",
-            is_self_inflicted = mandeath == "6",
-            is_natural = mandeath == "7",
-            is_not_specified = mandeath == "8") %>% 
-       rowwise() %>% 
-       mutate(manner_name = manners[[manner_]],
-                 age = ages[[age_]],
-                 education = educations[[educ_]],
-                 place = places[[place_]],
-                 race = races[[race_]]) %>%
-       select(!ends_with("_")) -> df 
+df %>%
+    mutate(
+        manner_ = as.character(mandeath),
+        age_ = as.character(ager52),
+        educ_ = as.character(educ2003),
+        place_ = as.character(placdth),
+        race_ = as.character(racer5),
+        is_accident = mandeath == "1",
+        is_suicide = mandeath == "2",
+        is_homicide = mandeath == "3",
+        is_pending_investigation = mandeath == "4",
+        is_cnd = mandeath == "5",
+        is_self_inflicted = mandeath == "6",
+        is_natural = mandeath == "7",
+        is_not_specified = mandeath == "8"
+    ) %>%
+    rowwise() %>%
+    mutate(
+        manner_name = manners[[manner_]],
+        age = ages[[age_]],
+        education = educations[[educ_]],
+        place = places[[place_]],
+        race = races[[race_]]
+    ) %>%
+    select(!ends_with("_")) -> df
 
 df$manner_name <- as.factor(df$manner_name)
 df$mandeath <- as.factor(df$mandeath)
@@ -161,16 +166,23 @@ run_random_forest <<- function() {
     trainIndex <- sample(1:nrow(df), 0.05 * nrow(df))
     train <- df[trainIndex, ]
     test <- df[-trainIndex, ]
-    model <- randomForest(
-        formula = `Manner of Death` ~ `Continuous Age` + `Average Record Count` + ucr39,
+    model1 <- randomForest(
+        `Manner of Death` ~ `Continuous Age` + `Average Record Count` + ucr39,
         data = train
     )
-    t_pred <- predict(model, test, type = "class")
-    confMat <- table(test$manner_name, t_pred)
-    accuracy <- sum(diag(confMat)) / sum(confMat)
+    model2 <- randomForest(
+        `Manner of Death` ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + `Marital Status` + Race + `Month of Death`,
+        data = train
+    )
+    t_pred1 <- predict(model1, test, type = "class")
+    t_pred2 <- predict(model2, test, type = "class")
+    confMat1 <- table(test$manner_name, t_pred1)
+    confMat2 <- table(test$manner_name, t_pred2)
+    accuracy1 <- sum(diag(confMat1)) / sum(confMat1)
+    accuracy2 <- sum(diag(confMat2)) / sum(confMat2)
     endTime <- Sys.time()
     # print(endTime - startTime)
-    accuracy
+    c(accuracy1, accuracy2)
 }
 
 run_decision_tree <<- function() {
@@ -256,9 +268,10 @@ run_logistic_regression <<- function() {
     ggplot(mcfaddens, aes(
         x = labels, y = rs, fill = labels
     )) +
-        geom_bar(stat= "identity")
+        geom_bar(stat = "identity")
 
     ggplot(mcfaddens, aes(
         x = counts, y = rs, color = labels
-    )) + geom_point()
+    )) +
+        geom_point()
 }

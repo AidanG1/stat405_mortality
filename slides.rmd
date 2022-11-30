@@ -67,7 +67,7 @@ educ_cause_table()
 
 ---
 
-```{r, killer, fig.cap="caption", echo=FALSE}
+```{r killer, fig.cap="caption", echo=FALSE}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 
 draw_killer(person_colors)
@@ -77,8 +77,21 @@ draw_killer(person_colors)
 
 ---
 
-```{r, cancer, fig.cap="caption", echo=FALSE}
+```{r cancer, fig.cap="caption", echo=FALSE}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 ```
 
+---
 
+```{r analysis, fig.cap="Decision Tree", echo=FALSE}
+source("analysis.r", local = TRUE)
+accuracy <- run_decision_tree()
+```
+`r accuracy`%
+
+---
+
+```{r analysis_random_forest, fig.cap="Random Forest", echo=FALSE}
+accuracy <- run_random_forest()
+```
+`r accuracy`%
