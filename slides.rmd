@@ -8,7 +8,7 @@ output:
         css: style.css
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, out.width="100%",  fig.width = 9, fig.height = 5)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.width = 9, fig.height = 5)
 source("setup.r")
 
 plotter <- function(p) {
@@ -31,11 +31,9 @@ plotter <- function(p) {
 - Combined the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset 
     - Tried to use aggregate statistics to analyze how risk factors can be matched with causes of death.
 
-# Questions
+# Given someone is dead, how did they die?
 
-## Given someone is dead, how did they die?
-
-## What explains trends or irregularities in mortality when looking at different data factors?
+# What explains trends or irregularities in mortality when looking at different data factors?
 
 # Exploration & Methods
 
@@ -110,7 +108,7 @@ plotter(cancer_free_text_plot())
 ```{r analysis, fig.cap="Decision Tree", message=FALSE}
 # source("analysis.r", local = TRUE)
 # accuracy <- run_decision_tree()
-accuracy = 0.8
+accuracy <- 0.8
 ```
 `r 100 * accuracy`%
 
