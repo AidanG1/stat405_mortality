@@ -3,8 +3,9 @@
 slides>slide {
     font-family: 'Crimson Pro', serif;
     overflow: scroll;
-    background-color: bisque;
-    /* background-size: 100% 100%; */
+    /* background-color: bisque; */
+    background-image: url('Images/bg.svg');
+    background-size: 100% 100%;
     background-repeat: repeat;
     background-position: top center;
 }
