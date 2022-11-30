@@ -76,6 +76,12 @@ plotter(month_manner_plot())
 
 ```{r plot_age_deaths}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
+plotter(deaths_by_age_plot())
+```
+
+---
+
+```{r plot_age_deaths_scaled}
 plotter(deaths_by_age_plot_scaled())
 ```
 
@@ -120,9 +126,9 @@ plotter(cancer_free_text_plot())
 ---
 
 ```{r analysis, fig.cap="Decision Tree", message=FALSE}
-# source("analysis.r", local = TRUE)
-# accuracy <- run_decision_tree()
-accuracy <- 0.8
+# accuracy <- 0.8
+source("analysis.r", local = TRUE)
+accuracy <- run_decision_tree()
 ```
 `r 100 * accuracy`%
 

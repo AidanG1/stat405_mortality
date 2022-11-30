@@ -25,51 +25,6 @@ df <- query(
      FROM mortality"
 )
 
-df$avg_record_count <- as.numeric(df$avg_record_count)
-
-df$mandeath[is.na(df$mandeath)] <- 8
-
-df %>%
-    mutate(
-        manner_ = as.character(mandeath),
-        age_ = as.character(ager52),
-        educ_ = as.character(educ2003),
-        place_ = as.character(placdth),
-        race_ = as.character(racer5),
-        is_accident = mandeath == "1",
-        is_suicide = mandeath == "2",
-        is_homicide = mandeath == "3",
-        is_pending_investigation = mandeath == "4",
-        is_cnd = mandeath == "5",
-        is_self_inflicted = mandeath == "6",
-        is_natural = mandeath == "7",
-        is_not_specified = mandeath == "8"
-    ) %>%
-    rowwise() %>%
-    mutate(
-        manner_name = manners[[manner_]],
-        age = ages[[age_]],
-        education = educations[[educ_]],
-        place = places[[place_]],
-        race = races[[race_]]
-    ) %>%
-    select(!ends_with("_")) -> df
-
-df$manner_name <- as.factor(df$manner_name)
-df$mandeath <- as.factor(df$mandeath)
-df$sex <- as.factor(df$sex)
-df$educ2003 <- as.factor(df$educ2003)
-df$monthdth <- as.factor(df$monthdth)
-df$placdth <- as.factor(df$placdth)
-df$weekday <- as.factor(df$weekday)
-df$ucr358 <- as.factor(df$ucr358)
-df$ucr113 <- as.factor(df$ucr113)
-df$ucr39 <- as.factor(df$ucr39)
-df$ager52 <- as.factor(df$ager52)
-df$ager27 <- as.factor(df$ager27)
-df$marstat <- as.factor(df$marstat)
-df$racer5 <- as.factor(df$racer5)
-
 ages_continuous <- list(
     "1" = 1 / (24 * 365),
     "2" = 2 / (24 * 365),
@@ -125,23 +80,53 @@ ages_continuous <- list(
     "52" = 0
 )
 
-df %>% mutate(ages_cont = ages_continuous[ager52]) -> df
 
+df$avg_record_count <- as.numeric(df$avg_record_count)
+
+df$mandeath[is.na(df$mandeath)] <- 8
+
+df %>%
+    mutate(
+        ages_cont = ages_continuous[ager52],
+        manner_ = as.character(mandeath),
+        age_ = as.character(ager52),
+        educ_ = as.character(educ2003),
+        place_ = as.character(placdth),
+        race_ = as.character(racer5),
+        is_accident = mandeath == "1",
+        is_suicide = mandeath == "2",
+        is_homicide = mandeath == "3",
+        is_pending_investigation = mandeath == "4",
+        is_cnd = mandeath == "5",
+        is_self_inflicted = mandeath == "6",
+        is_natural = mandeath == "7",
+        is_not_specified = mandeath == "8"
+    ) %>%
+    rowwise() %>%
+    mutate(
+        manner_name = manners[[manner_]],
+        age = ages[[age_]],
+        education = educations[[educ_]],
+        place = places[[place_]],
+        race = races[[race_]]
+    ) %>%
+    select(!ends_with("_")) -> df
+
+df$manner_name <- as.factor(df$manner_name)
+# df$mandeath <- as.factor(df$mandeath)
+df$sex <- as.factor(df$sex)
+# df$educ2003 <- as.factor(df$educ2003)
+df$monthdth <- as.factor(df$monthdth)
+# df$placdth <- as.factor(df$placdth)
+df$weekday <- as.factor(df$weekday)
+df$ucr358 <- as.factor(df$ucr358)
+df$ucr113 <- as.factor(df$ucr113)
+df$ucr39 <- as.factor(df$ucr39)
+# df$ager52 <- as.factor(df$ager52)
+# df$ager27 <- as.factor(df$ager27)
+df$marstat <- as.factor(df$marstat)
+# df$racer5 <- as.factor(df$racer5)
 df$ages_cont <- as.numeric(df$ages_cont)
-
-# rename so prints well
-df %>% rename(
-    `Continuous Age` = ages_cont,
-    `Manner of Death` = manner_name,
-    `Education` = education,
-    `Average Record Count` = avg_record_count,
-    `Sex` = sex,
-    Education = education,
-    Place = place,
-    `Marital Status` = marstat,
-    Race = race,
-    `Month of Death` = monthdth
-) -> df
 
 # vars: ages_cont: continuous
 #       avg_record_count: continuous
@@ -159,21 +144,17 @@ df %>% rename(
 
 
 ## Random Forest
-# model <- randomForest(
-#   formula = manner_name ~ ages_cont + avg_record_count + ucr39 + sex + racer5 + educ2003 + placdth + marstat,
-#   data = train
-# )
 run_random_forest <<- function() {
     library(randomForest)
     trainIndex <- sample(1:nrow(df), 0.05 * nrow(df))
     train <- df[trainIndex, ]
     test <- df[-trainIndex, ]
     model1 <- randomForest(
-        `Manner of Death` ~ `Continuous Age` + `Average Record Count` + ucr39,
+        manner_name ~ ages_cont + avg_record_count + ucr39,
         data = train
     )
     model2 <- randomForest(
-        `Manner of Death` ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + `Marital Status` + Race + `Month of Death`,
+        manner_name ~ ages_cont + avg_record_count + sex + education + place + marstat + race + monthdth,
         data = train
     )
     t_pred1 <- predict(model1, test, type = "class")
@@ -188,11 +169,24 @@ run_random_forest <<- function() {
 }
 
 run_decision_tree <<- function() {
+    # rename so prints well
+    df %>% rename(
+        `Continuous Age` = ages_cont,
+        `Manner of Death` = manner_name,
+        `Education` = education,
+        `Average Record Count` = avg_record_count,
+        `Sex` = sex,
+        Education = education,
+        Place = place,
+        `Marital Status` = marstat,
+        Race = race,
+        `Month of Death` = monthdth
+    ) -> renamed_df
     library(rpart)
     library(rpart.plot)
-    trainIndex <- sample(1:nrow(df), 0.8 * nrow(df))
-    train <- df[trainIndex, ]
-    test <- df[-trainIndex, ]
+    trainIndex <- sample(1:nrow(renamed_df), 0.8 * nrow(renamed_df))
+    train <- renamed_df[trainIndex, ]
+    test <- renamed_df[-trainIndex, ]
     startTime <- Sys.time()
     tree <- rpart(`Manner of Death` ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + `Marital Status` + Race + `Month of Death`, data = train, control = rpart.control(cp = .001)) # to make model more accurate, can add in monthdth and ucr39 and decrease cp
     # tree <- rpart(manner_name ~ ages_cont + avg_record_count + ucr39, data = train, method = "class", control = rpart.control(cp = .5))
@@ -217,10 +211,22 @@ run_decision_tree <<- function() {
 
 ## Linear Models
 run_logistic_regression <<- function() {
+    df %>% rename(
+        `Continuous Age` = ages_cont,
+        `Manner of Death` = manner_name,
+        `Education` = education,
+        `Average Record Count` = avg_record_count,
+        `Sex` = sex,
+        Education = education,
+        Place = place,
+        `Marital Status` = marstat,
+        Race = race,
+        `Month of Death` = monthdth
+    ) -> renamed_df
     library(pscl)
-    trainIndex <- sample(1:nrow(df), 0.5 * nrow(df))
-    train <- df[trainIndex, ]
-    test <- df[-trainIndex, ]
+    trainIndex <- sample(1:nrow(renamed_df), 0.5 * nrow(renamed_df))
+    train <- renamed_df[trainIndex, ]
+    test <- renamed_df[-trainIndex, ]
     fit_is_accident <- glm(is_accident ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
     fit_is_suicide <- glm(is_suicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
     fit_is_homicide <- glm(is_homicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")

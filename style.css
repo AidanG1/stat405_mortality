@@ -14,7 +14,7 @@ slides>slide {
     --text-color: #000000;
 }
 
-.title-slide>hroup>p {
+.title-slide>hgroup>p {
     color: var(--text-color)
 }
 
