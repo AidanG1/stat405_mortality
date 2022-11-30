@@ -69,9 +69,8 @@ educ_cause %>% mutate(
     prop = unname(count / totals[educ2003])
 ) -> educ_cause
 
-plot_educ_cause <- function() {
-    educ_cause %>% mutate(cause = str_trunc(cause, 23)) %>%
-    ggplot() +
+educ_cause_plot <- function() {
+    g <- educ_cause %>% mutate(cause = str_trunc(cause, 23)) %>% ggplot() +
         geom_count(aes(y = cause, x = education, size = prop, color = educ2003)) +
         ggtitle("Cause of Death by Education Level") +
         labs(
@@ -87,6 +86,7 @@ plot_educ_cause <- function() {
         )) +
         scale_color_gradient(guide = "none") +
         scale_x_discrete(limits = education_tags)
+    g
 }
 
 educ_cause_table <- function() {

@@ -7,13 +7,17 @@ GROUP BY Break_Out, Question;
 ")
 cancer$Break_Out <- as.factor(cancer$Break_Out)
 
-ggplot(cancer, aes(group = Question)) +
-    geom_line(aes(x = Break_Out, y = avg_data, color = Question, size = I(2))) +
-    ggtitle("Conditions by Age Group") +
-    labs(
-        x = "Age Group", y = "Percent of Age Group"
-    ) +
-    theme(
-        legend.position = "bottom",
-        legend.direction = "vertical"
-    )
+
+cancer_free_text_plot <- function() {
+    g <- ggplot(cancer, aes(group = Question)) +
+        geom_line(aes(x = Break_Out, y = avg_data, color = Question, size = I(2))) +
+        ggtitle("Conditions by Age Group") +
+        labs(
+            x = "Age Group", y = "Percent of Age Group"
+        ) +
+        theme(
+            legend.position = "bottom",
+            legend.direction = "vertical"
+        )
+    g
+}

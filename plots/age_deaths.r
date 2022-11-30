@@ -30,29 +30,29 @@ scale <- data.frame(
         1,
         1,
         1,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
-        1/4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
+        1 / 4,
         1
     )
 )
@@ -61,25 +61,32 @@ deaths_by_age <- cbind(deaths_by_age, scale)
 
 deaths_by_age$age <- factor(deaths_by_age$age, levels = deaths_by_age$age[order(deaths_by_age$ager52)])
 
-ggplot(deaths_by_age, aes(x = age, y = count, fill = age)) +
-    geom_bar(stat = "identity") +
-    labs(x = "Age Range", y = "Number of Deaths") +
-    ggtitle("Deaths by Age") +
-    theme(
-        axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
-        axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
-        legend.position = "none"
-    )
+
+
+deaths_by_age_plot <- function() {
+    g <- ggplot(deaths_by_age, aes(x = age, y = count, fill = age)) +
+        geom_bar(stat = "identity") +
+        labs(x = "Age Range", y = "Number of Deaths") +
+        ggtitle("Deaths by Age") +
+        theme(
+            axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
+            axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
+            legend.position = "none"
+        )
+    g
+}
 
 
 
-
-ggplot(deaths_by_age, aes(x = age, y = log(count * scale), fill = age)) +
-    geom_bar(stat = "identity") +
-    labs(x = "Age Range", y = "Number of Deaths") +
-    ggtitle("Deaths by Age Scaled to Bucket Size on Log Scale") +
-    theme(
-        axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
-        axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
-        legend.position = "none"
-    )
+deaths_by_age_plot_scaled <- function() {
+    g <- ggplot(deaths_by_age, aes(x = age, y = log(count * scale), fill = age)) +
+        geom_bar(stat = "identity") +
+        labs(x = "Age Range", y = "Number of Deaths") +
+        ggtitle("Deaths by Age Scaled to Bucket Size on Log Scale") +
+        theme(
+            axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
+            axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
+            legend.position = "none"
+        )
+    g
+}

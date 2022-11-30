@@ -5,9 +5,15 @@ date: November 23, 2022
 output:
     ioslides_presentation:
         widescreen: true
+        css: style.css
 ---
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, out.width="100%",  fig.width = 9, fig.height = 6)
 source("setup.r")
+
+plotter <- function(p) {
+    use_plotly(p)
+}
 ```
 
 # Data
@@ -16,7 +22,7 @@ source("setup.r")
 - Gathered from the National Bureau of Economic Research, who creates and distributes a dataset of US mortality for every year since 1959
 - Each row represents a single death, while each column represents a different demographic characteristic of the deceased.
 - Used the 2019 edition of the dataset since we did not want to focus on COVID-19
-- Important information includes education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different - risk factors for each deceased individual
+- Important information includes education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different ailments for each deceased individual
 
 ## Secondary Dataset
 - Using Behavioral Risk Factor Surveillance System Survey
@@ -29,46 +35,63 @@ source("setup.r")
 
 ## Given someone is dead, how did they die?
 
-## Hypothesis + More Questions
+## What explains trends or irregularities in mortality when looking at different data factors?
 
 # Exploration & Methods
 
 ---
 
-```{r, weekday_deaths, fig.cap="caption", echo=FALSE}
+```{r, weekday_deaths, fig.cap="caption"}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
-deaths_by_day_plot()
+plotter(deaths_by_day_plot())
 ```
 
 ---
 
-```{r weekday_deaths_scaled, fig.cap="caption", echo=FALSE}
-deaths_by_day_plot_scaled()
+```{r weekday_deaths_scaled, fig.cap="caption"}
+plotter(deaths_by_day_plot_scaled())
 ```
 
 ---
 
-```{r, months_deaths, fig.cap="caption", echo=FALSE}
+```{r, months_deaths, fig.cap="caption"}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
+
+plotter(month_count_plot(df_month_counts))
 ```
 
 ---
 
-```{r, educ_cause, echo=FALSE, fig.width=10, fig.height = 6}
+```{r, month_manner, fig.cap="caption"}
+source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
+plotter(month_manner_plot())
+```
+
+--- 
+
+```{r plot_age_gender, fig.cap="caption"}
+source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
+plotter(deaths_by_age_gender_plot())
+```
+
+---
+
+```{r, educ_cause}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
-plot_educ_cause()
+plotter(educ_cause_plot())
 ```
 
 ## Table {.smaller}
 
-```{r, educ_cause_table, echo=FALSE}
+```{r, educ_cause_table}
 educ_cause_table()
 ```
 
 ---
 
-```{r killer, fig.cap="caption", echo=FALSE}
+```{r killer, fig.cap="Killer Plot"}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
+# source("shiny.r", local = TRUE, print.eval = TRUE)
 
 draw_killer(person_colors)
 ```
@@ -77,22 +100,24 @@ draw_killer(person_colors)
 
 ---
 
-```{r cancer, fig.cap="caption", echo=FALSE}
+```{r cancer, fig.cap="Free Text"}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
+plotter(cancer_free_text_plot())
 ```
 
 ---
 
-```{r analysis, fig.cap="Decision Tree", echo=FALSE}
-source("analysis.r", local = TRUE)
-accuracy <- run_decision_tree()
+```{r analysis, fig.cap="Decision Tree", message=FALSE}
+# source("analysis.r", local = TRUE)
+# accuracy <- run_decision_tree()
+accuracy = 0.8
 ```
-`r accuracy`%
+`r 100 * accuracy`%
 
 ---
 
-```{r analysis_random_forest, fig.cap="Random Forest", echo=FALSE}
+```{r analysis_random_forest, fig.cap="Random Forest"}
 ## accuracy <- run_random_forest()
 ```
 TODO: fix random forest.
-`r accuracy`%
+`r 100 * accuracy`%

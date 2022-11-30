@@ -50,11 +50,14 @@ month_counts$monthdth_name <- factor(month_counts$monthdth_name, levels = unique
 # ggplot(month_counts %>% filter(mandeath == 3), aes(x = monthdth, y = count_scaled)) +
 #     geom_line()
 
-ggplot(month_counts, aes(monthdth, count_scaled, color = manner_name)) +
-    geom_line() +
-    # scale_x_discrete(limits = month_counts$monthdth_name) +
-    facet_wrap(vars(manner_name), scales = "free") +
-    labs(
-        x = "Month", y = "Deaths per day"
-    ) +
-    ggtitle("Deaths per Day in Month by Manner")
+month_manner_plot <- function() {
+    g <- ggplot(month_counts, aes(monthdth, count_scaled, color = manner_name)) +
+        geom_line() +
+        # scale_x_discrete(limits = month_counts$monthdth_name) +
+        facet_wrap(vars(manner_name), scales = "free") +
+        labs(
+            x = "Month", y = "Deaths per day"
+        ) +
+        ggtitle("Deaths per Day in Month by Manner")
+    g
+}

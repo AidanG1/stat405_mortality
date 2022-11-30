@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300&display=swap');
+
+slides>slide {
+    font-family: 'Crimson Pro', serif;
+    overflow: scroll;
+    background-color: bisque;
+    /* background-size: 100% 100%; */
+    background-repeat: repeat;
+    background-position: top center;
+}
+
+:root {
+    --text-color: #000000;
+}
+
+.title-slide>hroup>p {
+    color: var(--text-color)
+}
+
+slides>slide>article {
+    color: var(--text-color)
+}
+
+slides>slide.dark {
+    background-image: url('Images/dalle3.png') !important;
+    background-repeat: repeat;
+    background-position: top center;
+}

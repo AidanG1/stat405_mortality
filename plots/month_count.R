@@ -32,11 +32,11 @@ names <- c(
     "December"
 )
 
-month_count_plot <<- function(df, title = "Deaths per Day in Month") {
+month_count_plot <- function(df, title = "Deaths per Day in Month") {
     df %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth]) -> df
     df$monthdth_name <- factor(df$monthdth_name, levels = df$monthdth_name[order(df$monthdth)])
 
-    ggplot(df) +
+    g <- ggplot(df) +
         geom_bar(aes(x = monthdth_name, weight = count_scaled, fill = monthdth_name)) +
         labs(
             x = "Month", y = "Deaths per day"
@@ -46,9 +46,10 @@ month_count_plot <<- function(df, title = "Deaths per Day in Month") {
             axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1)
         ) +
         scale_fill_discrete(guide = "none")
+    g
 }
 
-month_count_table <<- function() {
+month_count_table <- function() {
     months_counts <- df_month_counts %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth])
     months_counts_filtered <- df_month_counts_filtered %>% mutate(count_scaled = count / days[monthdth], monthdth_name = names[monthdth])
     merge(months_counts, months_counts_filtered, by = "monthdth_name") %>% select(monthdth_name, count_scaled.x, count_scaled.y) %>% rename("Month" = monthdth_name, "Death Count" = count_scaled.x, "Death Count Excluding Natural" = count_scaled.y) %>% kable()

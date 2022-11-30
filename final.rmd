@@ -43,8 +43,14 @@ knitr::knit_hooks$set(time_it = local({
 # knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, dev = 'png')
 # for PDF no code
 # knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300, time_it = TRUE, fig.width = 8, fig.height = 5)
+# plotter <- function(p) {
+#   use_plot(p)
+# }
 # for html with svg
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%",  fig.width = 8, fig.height = 5)
+plotter <- function(p) {
+  use_plotly(p)
+}
 
 source("setup.r")
 ```
@@ -111,8 +117,8 @@ First, we plotted weekday of death versus death counts. There were the most deat
 
 ```{r plot_weekday_deaths}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
-deaths_by_day_plot()
-deaths_by_day_plot_scaled()
+plotter(deaths_by_day_plot())
+plotter(deaths_by_day_plot_scaled())
 ```
 
 ## Deaths by Month
@@ -120,14 +126,15 @@ The most deaths occur in the coldest and darkest months of the year which are Fe
 ```{r plot_month_deaths}
 source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 
-month_count_plot(df_month_counts)
+plotter(month_count_plot(df_month_counts))
 ```
 
 Interestingly, the large number of deaths in the winter months and lower numbers is summer can be entirely explained by natural causes deaths. Since most deaths are due to natural causes, even a small increase in deaths due to natural causes can have a large impact on the total number of deaths. The reasoning for increased deaths due to natural causes in winter months is becauase people spend more time inside with cold weather which leads to increased disease transmission.
 ```{r plot_month_manner}
 month_count_table()
-month_count_plot(df_month_counts_filtered, "Deaths per Day in Month Excluding Natural Causes")
+plotter(month_count_plot(df_month_counts_filtered, "Deaths per Day in Month Excluding Natural Causes"))
 source("plots/month_manner.r", local = TRUE, print.eval = TRUE)
+plotter(month_manner_plot())
 ```
 
 ## Deaths by Age
@@ -135,6 +142,8 @@ Next, we plotted age versus death counts. Deaths were most prevalent among older
 
 ```{r plot_age_deaths}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
+plotter(deaths_by_age_plot())
+plotter(deaths_by_age_plot_scaled())
 ```
 
 ## Deaths by Manner
@@ -142,25 +151,28 @@ Here, we plotted the manner of death versus age and counted how many people of a
 
 ```{r plot_age_manner}
 source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
+plotter(manner_by_age_plot())
 ```
 
 ## Deaths by Age and Gender
 In this plot, we plotted the number of deaths versus age ranges while demonstrating how many men compared to women passed away in each age category. In each of the bars, the red fill represents the amount of women who passed away in that particular age range while the blue accounts for the amount of men. The percentage seen in each bar represents the proportion of men in a given age range that passed away. This analysis shows that the majority of people under the age of 80 who pass away tend to be men, as nearly every bar from ages 0-80 shows the proportion of male deaths to be above 50%. This proportion of male deaths goes down after 80 years of age, and is likely because women who are of an older age tend to live to a complete life expectancy. What this plot may help to inform us about is the differences in male and females lives and life expectancies. Further research into differences in lifestyle choices for men versus women as a whole may help better explain why women tend to live longer than men. Furthermore, this plot accompanied with a plot on cause of death by gender, may assist in determining what kind of, potentially more risky, behaviors men may partake in during their lifetimes that lead to an earlier death than women.
 ```{r plot_age_gender}
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
+plotter(deaths_by_age_gender_plot())
 ```
 
 ## Cause of Death by Education
 For most causes of death, level of education does not have an impact on what proportion of people have that cause of death. The largest difference belongs to "Certain conditions originating in the perinatal period" with high occurrences in those with 8th grade or less education and those with unknown education and nearly no occurrences in all others. Another large proportion difference is in "Congenital malformations" where 8th grade or less has a much higher mortality proportion than other education levels. For causes of death that are not highly tied to conditions at birth, "Syphilis" and "Assault (homicide)" have the highest differing proportions. "Syphilis" has a quite small sample size but unknown education has the highest mortality proportion. For "Assault (homicide)", 9 - 12th grade, no diploma has the highest mortality proportion.
 ```{r plot_education_cause}
 source("plots/educ_cause.r", local = TRUE, print.eval = TRUE)
-plot_educ_cause()
+plotter(educ_cause_plot())
 ```
 
 ## Free Text Analysis: Selected Health Conditions by Age Group
 Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
 ```{r plot_conditions_text}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
+plotter(cancer_free_text_plot())
 ```
 
 ## Modeling

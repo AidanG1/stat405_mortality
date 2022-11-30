@@ -2,18 +2,33 @@ library(tidyverse)
 library(RSQLite)
 library(grid)
 library(knitr)
+library(plotly)
 
-db <<- dbConnect(SQLite(), "data/mortality.sqlite")
+db <- dbConnect(SQLite(), "data/mortality.sqlite")
 initRegExp(db)
-query <<- function(q) {
+query <- function(q) {
     req <- dbSendQuery(db, q)
     results <- dbFetch(req)
     dbClearResult(req)
     results
 }
 
+use_plot <- function(p) {
+    p
+}
 
-manners <<- list(
+use_plotly <- function(p) {
+    ggplotly(p + theme(
+        panel.background = element_rect(fill = "transparent"), # transparent panel bg
+        plot.background = element_rect(fill = "transparent", color = NA), # transparent plot bg
+        panel.grid.major = element_blank(), # remove major gridlines
+        panel.grid.minor = element_blank(), # remove minor gridlines
+        legend.background = element_rect(fill = "transparent"), # transparent legend bg
+        legend.box.background = element_rect(fill = "transparent") # transparent legend panel
+    )) %>% config(displayModeBar = F)
+}
+
+manners <- list(
     "1" = "Accident",
     "2" = "Suicide",
     "3" = "Homicide",
@@ -24,7 +39,7 @@ manners <<- list(
     "8" = "Not Specified"
 )
 
-ages <<- list(
+ages <- list(
     "1" = "Under 1 hour",
     "2" = "1-23 hours",
     "3" = "1 day",
@@ -79,7 +94,7 @@ ages <<- list(
     "52" = "Age not stated"
 )
 
-educations <<- list(
+educations <- list(
     "1" = "8th grade or less",
     "2" = "9-12th grade, no diploma",
     "3" = "High school graduate or GED",
@@ -91,7 +106,7 @@ educations <<- list(
     "9" = "Unknown"
 )
 
-places <<- list(
+places <- list(
     "1" = "Hospital - Inpatient",
     "2" = "Hospital - Outpatient",
     "3" = "Hospital - Dead on Arrival",
@@ -102,7 +117,7 @@ places <<- list(
     "9" = "Place of death unknown"
 )
 
-races <<- list(
+races <- list(
     "0" = "Other (Puerto Rico Only)",
     "1" = "White",
     "2" = "Black",

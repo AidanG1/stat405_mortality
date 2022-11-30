@@ -198,7 +198,7 @@ df$manner <- factor(
 
 df$marital_status <- factor(df$marital_status, levels = unique(df$marital_status[order(df$marstat)]))
 
-draw_table <<- function(grouping) {
+draw_table <- function(grouping) {
     table_df <- df %>% 
         group_by({{ grouping }}) %>% 
         rename(
@@ -231,7 +231,7 @@ person_colors <<- c(
     "#aec489"
 )
 
-draw_killer <<- function(person_colors, scale = 1) {
+draw_killer <- function(person_colors, scale = 1) {
     # print("Draw Killer")
     grid.newpage()
     pushViewport(viewport(
