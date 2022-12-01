@@ -109,10 +109,11 @@ educ_cause_table()
 
 ```{r killer}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
-# source("shiny.r", local = TRUE, print.eval = TRUE)
-
 draw_killer(person_colors)
 ```
+
+## Killer - Shiny
+<iframe src="http://localhost:3000/" width="100%"></iframe>
 
 # Analysis
 
@@ -141,9 +142,20 @@ accuracy <- run_random_forest()
 
 ---
 
-```{r logistic_regression}
+<!--```{r logistic_regression}
 plots <- run_logistic_regression()
-for (plot in plots) {
-    plotter(plot)
-}
+plotter(plots[[1]])
 ```
+
+---
+
+```{r logistic_regression2}
+plotter(plots[[2]])
+```
+
+---
+
+```{r logistic_regression3}
+plotter(plots[[3]])
+```
+-->

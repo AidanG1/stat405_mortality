@@ -252,7 +252,7 @@ run_logistic_regression <<- function() {
         "Manners of Death" = c(
             "Accident", "Suicide", "Homicide", "Pending Investigation", "Could Not Determine", "Natural", "Not Specified"
         ),
-        "McFadden R^2" = c(
+        McFadden.R2 = c(
             pR2(fit_is_accident)["McFadden"],
             pR2(fit_is_suicide)["McFadden"],
             pR2(fit_is_homicide)["McFadden"],
@@ -274,12 +274,12 @@ run_logistic_regression <<- function() {
     )
 
     g1 <- ggplot(mcfaddens, aes(
-        x = labels, y = rs, fill = labels
+        x = labels, y = McFadden.R2, fill = labels
     )) +
         geom_bar(stat = "identity")
 
     g2 <- ggplot(mcfaddens, aes(
-        x = counts, y = rs, color = labels
+        x = counts, y = McFadden.R2, color = labels
     )) +
         geom_point()
 
