@@ -283,5 +283,5 @@ run_logistic_regression <<- function() {
     )) +
         geom_point()
 
-    c(g1, g2, g3)
+    list(g1, g2, g3)
 }
