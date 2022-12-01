@@ -1,4 +1,6 @@
-library(shiny)
+# library(shiny)
+source("setup.r")
+source("plots/killer.r")
 
 coloredBox <- function(color) {
     div(style = paste0("background-color:", color, "; width: 20px; height: 20px"))
@@ -64,5 +66,5 @@ server <- function(input, output) {
     })
 }
 
-print("Killer Plot UI Start")
-shinyApp(ui = ui, server = server)
+# print("Killer Plot UI Start")
+shinyApp(ui = ui, server = server, options = list(port = 3000))
