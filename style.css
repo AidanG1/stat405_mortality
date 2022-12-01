@@ -5,8 +5,8 @@ slides>slide {
     overflow: scroll;
     /* background-color: bisque; */
     background-image: url('Images/bg.svg');
-    background-size: 100% 100%;
-    background-repeat: repeat;
+    /* background-size: 100% 100%; */
+    background-repeat: repeat-x;
     background-position: top center;
 }
 

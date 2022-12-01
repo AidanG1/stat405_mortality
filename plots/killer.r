@@ -219,7 +219,8 @@ column_var <- unique(df$age)
 
 rows <- length(row_var)
 cols <- length(column_var)
-title <- "Average Ailments Attributed to Death by Marital Status, Age, Matter"
+# title <- "Average Ailments Attributed to Death by Marital Status, Age, Matter"
+title <- "Average Ailments Attributed to Death"
 labels.x <- as.vector(row_var)
 labels.y <- as.vector(column_var)
 person_colors <<- c(

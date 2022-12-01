@@ -80,7 +80,6 @@ ages_continuous <- list(
     "52" = 0
 )
 
-
 df$avg_record_count <- as.numeric(df$avg_record_count)
 
 df$mandeath[is.na(df$mandeath)] <- 8
@@ -119,8 +118,8 @@ df$sex <- as.factor(df$sex)
 df$monthdth <- as.factor(df$monthdth)
 # df$placdth <- as.factor(df$placdth)
 df$weekday <- as.factor(df$weekday)
-df$ucr358 <- as.factor(df$ucr358)
-df$ucr113 <- as.factor(df$ucr113)
+# df$ucr358 <- as.factor(df$ucr358)
+# df$ucr113 <- as.factor(df$ucr113)
 df$ucr39 <- as.factor(df$ucr39)
 # df$ager52 <- as.factor(df$ager52)
 # df$ager27 <- as.factor(df$ager27)
@@ -209,8 +208,7 @@ run_decision_tree <<- function() {
     accuracy
 }
 
-## Linear Models
-run_logistic_regression <<- function() {
+run_logistic_regression <<- function(full = FALSE) {
     df %>% rename(
         `Continuous Age` = ages_cont,
         `Manner of Death` = manner_name,
@@ -224,32 +222,50 @@ run_logistic_regression <<- function() {
         `Month of Death` = monthdth
     ) -> renamed_df
     library(pscl)
-    trainIndex <- sample(1:nrow(renamed_df), 0.5 * nrow(renamed_df))
+    trainIndex <- sample(1:nrow(renamed_df), 0.1 * nrow(renamed_df))
     train <- renamed_df[trainIndex, ]
     test <- renamed_df[-trainIndex, ]
-    fit_is_accident <- glm(is_accident ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    fit_is_suicide <- glm(is_suicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    fit_is_homicide <- glm(is_homicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    fit_is_pending_investigation <- glm(is_pending_investigation ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    fit_is_cnd <- glm(is_cnd ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    # fit_self_inflicted <- glm(is_self_inflicted ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family="binomial")
-    fit_natural <- glm(is_natural ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    fit_not_specified <- glm(is_not_specified ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
+    if (full) {
+        fit_is_accident <- glm(is_accident ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_is_accident, "models/fit_is_accident.rds")
+        fit_is_suicide <- glm(is_suicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_is_suicide, "models/fit_is_suicide.rds")
+        fit_is_homicide <- glm(is_homicide ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_is_homicide, "models/fit_is_homicide.rds")
+        fit_is_pending_investigation <- glm(is_pending_investigation ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_is_pending_investigation, "models/fit_is_pending_investigation.rds")
+        fit_is_cnd <- glm(is_cnd ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_is_cnd, "models/fit_is_cnd.rds")
+        # fit_self_inflicted <- glm(is_self_inflicted ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family="binomial")
+        fit_natural <- glm(is_natural ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_natural, "models/fit_natural.rds")
+        fit_not_specified <- glm(is_not_specified ~ `Continuous Age` + `Average Record Count` + Sex + Education + Place + ucr39 + `Race`, data = train, family = "binomial")
+        write_rds(fit_not_specified, "models/fit_not_specified.rds")
+    } else {
+        fit_is_accident <- read_rds("models/fit_is_accident.rds")
+        fit_is_suicide <- read_rds("models/fit_is_suicide.rds")
+        fit_is_homicide <- read_rds("models/fit_is_suicide.rds")
+        fit_is_pending_investigation <- read_rds("models/fit_is_pending_investigation.rds")
+        fit_is_cnd <- read_rds("models/fit_is_cnd.rds")
+        fit_natural <- read_rds("models/fit_natural.rds")
+        fit_not_specified <- read_rds("models/fit_not_specified.rds")
+     }
     test_sample <- sample(1:nrow(test), 0.005 * nrow(test))
     test_sample <- test[test_sample, ]
-    predicted <- predict(fit_is_accident, test_sample, type = "response")
+    predicted <- predict(fit_is_homicide, test_sample, type = "response")
     g3 <- ggplot(
         data.frame(
             predicted = predicted,
-            actual = test_sample$is_accident
+            actual = test_sample$is_homicide,
+            manner = test_sample$`Manner of Death`
         ),
-        aes(x = predicted, y = actual)
+        aes(x = predicted, y = actual, color = manner)
     ) +
         geom_point() +
         geom_abline(intercept = 0, slope = 1, color = "red")
 
     mcfaddens <- data.frame(
-        "Manners of Death" = c(
+        Manner.of.Death = c(
             "Accident", "Suicide", "Homicide", "Pending Investigation", "Could Not Determine", "Natural", "Not Specified"
         ),
         McFadden.R2 = c(
@@ -273,15 +289,26 @@ run_logistic_regression <<- function() {
         )
     )
 
+    write_rds(mcfaddens, "models/mcfaddens.rds")
+
     g1 <- ggplot(mcfaddens, aes(
-        x = labels, y = McFadden.R2, fill = labels
+        x = Manner.of.Death, y = McFadden.R2, fill = Manner.of.Death
     )) +
         geom_bar(stat = "identity")
 
     g2 <- ggplot(mcfaddens, aes(
-        x = counts, y = McFadden.R2, color = labels
+        x = counts, y = McFadden.R2, color = Manner.of.Death
     )) +
         geom_point()
 
     list(g1, g2, g3)
+}
+
+plot_mcfaddens <- function() {
+    mcfaddens <- read_rds("models/mcfaddens.rds")
+    g1 <- ggplot(mcfaddens, aes(
+        x = Manner.of.Death, y = McFadden.R2, fill = Manner.of.Death
+    )) +
+        geom_bar(stat = "identity")
+    g1
 }

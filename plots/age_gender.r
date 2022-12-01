@@ -24,7 +24,7 @@ deaths_by_age_gender_plot <- function() {
         geom_bar(stat = "identity") +
         # geom_text(aes(y = 1, label = s_labels), hjust = -0.1, angle = 90) +
         labs(x = "Age Range", y = "Number of Deaths") +
-        ggtitle("Deaths by Age on a Log Scale with Percent Male") +
+        ggtitle("Deaths by Age on a Log Scale") +
         theme(
             axis.text.x = element_text(angle = 60, hjust = 1, vjust = 0.5),
             axis.title.x = element_text(margin = margin(t = 1, unit = "cm")),
