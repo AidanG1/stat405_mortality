@@ -134,8 +134,16 @@ accuracy <- run_decision_tree()
 
 ---
 
-```{r analysis_random_forest, fig.cap="Random Forest"}
-## accuracy <- run_random_forest()
+```{r analysis_random_forest}
+accuracy <- run_random_forest()
 ```
-TODO: fix random forest.
 `r 100 * accuracy`%
+
+---
+
+```{r logistic_regression}
+plots <- run_logistic_regression()
+for (plot in plots) {
+    plotter(plot)
+}
+```

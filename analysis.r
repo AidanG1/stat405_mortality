@@ -235,10 +235,10 @@ run_logistic_regression <<- function() {
     # fit_self_inflicted <- glm(is_self_inflicted ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family="binomial")
     fit_natural <- glm(is_natural ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
     fit_not_specified <- glm(is_not_specified ~ `Continuous Age` + `Average Record Count` + Sex + Education + `Month of Death` + Place + ucr39 + `Marital Status` + `Race`, data = train, family = "binomial")
-    test_sample <- sample(1:nrow(test), 0.01 * nrow(test))
+    test_sample <- sample(1:nrow(test), 0.005 * nrow(test))
     test_sample <- test[test_sample, ]
     predicted <- predict(fit_is_accident, test_sample, type = "response")
-    ggplot(
+    g3 <- ggplot(
         data.frame(
             predicted = predicted,
             actual = test_sample$is_accident
@@ -273,13 +273,15 @@ run_logistic_regression <<- function() {
         )
     )
 
-    ggplot(mcfaddens, aes(
+    g1 <- ggplot(mcfaddens, aes(
         x = labels, y = rs, fill = labels
     )) +
         geom_bar(stat = "identity")
 
-    ggplot(mcfaddens, aes(
+    g2 <- ggplot(mcfaddens, aes(
         x = counts, y = rs, color = labels
     )) +
         geom_point()
+
+    c(g1, g2, g3)
 }
