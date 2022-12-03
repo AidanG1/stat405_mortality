@@ -1,7 +1,7 @@
 ---
 title: Stat 405 Mortality
 author: Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, Aidan Gerber
-date: November 23, 2022
+date: December 1, 2022
 output:
     ioslides_presentation:
         widescreen: true

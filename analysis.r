@@ -309,6 +309,7 @@ plot_mcfaddens <- function() {
     g1 <- ggplot(mcfaddens, aes(
         x = Manner.of.Death, y = McFadden.R2, fill = Manner.of.Death
     )) +
-        geom_bar(stat = "identity")
+        geom_bar(stat = "identity") +
+        ggtitle("McFadden R2 by Manner of Death")
     g1
 }
