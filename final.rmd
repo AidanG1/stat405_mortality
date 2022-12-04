@@ -90,7 +90,9 @@ kable(q %>% select(count, race, age, education, sex))
 For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
 
 # Questions
-We are interested in what different factors are correlated with higher death rates. Depending on the different causes, different policies can be recommended. Moreover, we can break down the different causes of death by demographics such as race, age, and sex to determine where resources should specifically be directed. 
+The main question that we would like to ask with the information available to us in this dataset is, given someone is dead, can we predict how they died? By looking at factors such as age, gender, place of death, educational level, health conditions, and race, can we determine with some level of certainty the manner of one's death?
+
+Additionally, we would also like to observe if there are any irregularities or trends in mortality when looking at specific factors such as the relationship between manner of death across months, deaths by age, deaths by gender and manner of death by education level. This will both inform us on trends in mortality among different demographic factors while also enhancing our predictions about how someone died based on the factors they identify with. 
 
 # Killer Plot
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
