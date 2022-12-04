@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  pdf_document:
-    default
-  # prettydoc::html_pretty:
-  #   toc: yes
-  #   toc_depth: 3
-  #   theme: hpstr
-  #   highlight: tango
-  #   df_print: paged
+  # pdf_document:
+  #   default
+  prettydoc::html_pretty:
+    toc: yes
+    toc_depth: 3
+    theme: hpstr
+    highlight: tango
+    df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -41,16 +41,16 @@ knitr::knit_hooks$set(time_it = local({
 }))
 
 # for PDF no code
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300, time_it = TRUE, fig.width = 8, fig.height = 5)
-plotter <- function(p) {
-  use_plot(p)
-}
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300, time_it = TRUE, fig.width = 8, fig.height = 5)
+# plotter <- function(p) {
+#   use_plot(p)
+# }
 
 # for html with svg
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%",  fig.width = 8, fig.height = 5)
-# plotter <- function(p) {
-#   use_plotly(p)
-# }
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%",  fig.width = 8, fig.height = 5)
+plotter <- function(p) {
+  use_plotly(p)
+}
 
 source("setup.r")
 ```
@@ -90,7 +90,7 @@ kable(q %>% select(count, race, age, education, sex))
 For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
 
 # Questions
-The main question that we would like to ask with the information available to us in this dataset is, given someone is dead, can we predict how they died? By looking at factors such as age, gender, place of death, educational level, health conditions, and race, can we determine with some level of certainty the manner of one's death?
+The main question we are asking is: given someone is dead, can we predict how they died? We will approach this by looking at factors such as age, gender, place of death, educational level, health conditions, and race, and build models for manner of death.
 
 Additionally, we would also like to observe if there are any irregularities or trends in mortality when looking at specific factors such as the relationship between manner of death across months, deaths by age, deaths by gender and manner of death by education level. This will both inform us on trends in mortality among different demographic factors while also enhancing our predictions about how someone died based on the factors they identify with. 
 
@@ -192,7 +192,7 @@ plotter(plot_mcfaddens())
 ```
 
 ## Decision Tree & Random Forest
-The decision tree predicts with `r 100 * accuracy`% accuracy and the random forest predicts with 88.89% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable. Each leaf contains the classified manner of death and 7 numbers. Each of the 7 numbers corresponds to the count of each manner that was classified to that. The first number is accident, second is suicide, third is homicide, fourth is pending investigation, fifth is could not determine, sixth is natural, and seventh is not specified.
+The decision tree predicts with 82.11% accuracy and the random forest predicts with 88.89% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable. Each leaf contains the classified manner of death and 7 numbers. Each of the 7 numbers corresponds to the count of each manner that was classified to that. The first number is accident, second is suicide, third is homicide, fourth is pending investigation, fifth is could not determine, sixth is natural, and seventh is not specified.
 ```{r decision_tree, echo=FALSE}
 accuracy <- run_decision_tree()
 ```
