@@ -95,7 +95,29 @@ The main question we are asking is: given someone is dead, can we predict how th
 Additionally, we would also like to observe if there are any irregularities or trends in mortality when looking at specific factors such as the relationship between manner of death across months, deaths by age, deaths by gender and manner of death by education level. This will both inform us on trends in mortality among different demographic factors while also enhancing our predictions about how someone died based on the factors they identify with. 
 
 # Killer Plot
-This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine.
+This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine. Rather than determining size by relative count, size is determined by record count. A record is an ailment that is recorded on a death certificate. These follow the ICD-10 standard. Some examples of records are C159: Malignant neoplasm of esophagus and K766: Portal hypertension.
+```{r most_common_record}
+data <- query(
+  "
+  SELECT t1.record_1,
+         ,
+         c.type,
+         c.color
+  FROM dogs d
+  LEFT JOIN cats c USING(color)
+  UNION ALL
+  SELECT d.type,
+          d.color,
+          c.type,
+          c.color
+  FROM cats c
+  LEFT JOIN dogs d USING(color)
+  WHERE d.color IS NULL;
+  "
+)
+```
+
+
 ```{r plot_killer}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 draw_killer(person_colors, 1) # this variable is defined globally
