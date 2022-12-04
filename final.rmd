@@ -63,6 +63,7 @@ Resources:
 [Website](https://mortality.aidang.me/)
 [PDF](https://mortality.aidang.me/final.pdf)
 [Slides](https://mortality.aidang.me/slides)
+[Github](https://github.com/AidanG1/stat405_mortality)
 
 ## Primary Dataset
 The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.

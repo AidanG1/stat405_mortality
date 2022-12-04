@@ -10,24 +10,22 @@ Created by Meera Borle, Isis Burgos, Naomi Consiglio, Carson Foster, and Aidan G
 # Table of Contents
 - [☠️ Stat 405 Final Project ☠️](#️-stat-405-final-project-️)
 - [Table of Contents](#table-of-contents)
-  - [⚡ Quick Info<a name="quick-info"></a>](#-quick-info)
-  - [✨ Getting Started<a name="getting-started"></a>](#-getting-started)
-  - [🔎 Data Set<a name="data"></a>](#-data-set)
-  - [💡 Question<a name="question"></a>](#-question)
-  - [📚 Features<a name="feature"></a>](#-features)
+  - [⚡ Quick Info](#-quick-info)
+  - [🕵️ Resources](#️-resources)
+  - [✨ Getting Started](#-getting-started)
+  - [🔎 Data Set](#-data-set)
 
 ## ⚡ Quick Info<a name="quick-info"></a>
-One sentence project tagline
+Using the NBER mortality data set, we analyzed the relationship between factors such as manner of death, marital status, race, sex, age, timing of death, and more, built models, and discovered interesting patterns.
+
+## 🕵️ Resources<a name="resources"></a>
+[Website](https://mortality.aidang.me/)
+[PDF](https://mortality.aidang.me/final.pdf)
+[Slides](https://mortality.aidang.me/slides)
+[Github](https://github.com/AidanG1/stat405_mortality)
 
 ## ✨ Getting Started<a name="getting-started"></a>
-To get started, place the RDS files from https://rice.app.box.com/s/qpc37cwxycp4ge3wsn7449w4qlojpabm into the ./data folder in the project root directory.
+To get started, place the mortality.sqlite file from https://rice.app.box.com/s/qpc37cwxycp4ge3wsn7449w4qlojpabm into the ./data folder in the project root directory.
 
 ## 🔎 Data Set<a name="data"></a>
-Explain the data set
- 
-## 💡 Question<a name="question"></a>
-Talk about the question to be solved
- 
- 
-## 📚 Features<a name="feature"></a>
-   - List features here as they are created
+The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
