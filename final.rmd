@@ -7,14 +7,14 @@ geometry: margin=1in
 mainfont: Times New Roman
 colorlinks: yes
 output:
-  pdf_document:
-    default
-  # prettydoc::html_pretty:
-  #   toc: yes
-  #   toc_depth: 3
-  #   theme: hpstr
-  #   highlight: tango
-  #   df_print: paged
+  # pdf_document:
+  #   default
+  prettydoc::html_pretty:
+    toc: yes
+    toc_depth: 3
+    theme: hpstr
+    highlight: tango
+    df_print: paged
   # html_document:
   #   toc: yes
   #   toc_depth: '3'
@@ -41,23 +41,24 @@ knitr::knit_hooks$set(time_it = local({
 }))
 
 # for PDF no code
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300, time_it = TRUE, fig.width = 8, fig.height = 4.5)
-plotter <- function(p) {
-  use_plot(p)
-}
-
-# for html with svg
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%",  fig.width = 8, fig.height = 5)
+# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = "png", out.width = "100%", fig.align = "center", dpi = 300, time_it = TRUE, fig.width = 8, fig.height = 4.5)
 # plotter <- function(p) {
-#   use_plotly(p)
+#   use_plot(p)
 # }
 
+# for html with svg
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dev = 'svglite', out.width="100%",  fig.width = 8, fig.height = 5)
+plotter <- function(p) {
+  use_plotly(p)
+}
+```
+
+```{r setup.r}
 source("setup.r")
 ```
 # Introduction
-Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to the palace. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
-Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics. 
-Cue [epic](https://vid.puffyan.us/watch?v=yY7iGa4t9-I) music.
+Masaki Kobayashi's *Harakiri* (1962) is a Japanese film about a samurai who asks to commit ritual suicide at a lord's palace. Throughout the film, the audience learns the story of what brings the samurai to make the request. At the palace, the samurai argues with and disrespects the lord's samurais, in revenge for past wrongs. These layers of disrespect lead to conflict and the main samurai kills many of the lord's in combat. The film ends with the lord's history where the events of the film are manipulated and recorded incorrectly to preserve honor.
+Contrastingly, when a person dies in the modern United States, their causes of death and characteristics are meticulously recorded with substantial effort put in to accuracy — not for honor — but for statistics. We are here to do those statistics.
 
 Resources:
 [Website](https://mortality.aidang.me/)
@@ -68,7 +69,7 @@ Resources:
 ## Primary Dataset
 The National Bureau of Economic Research creates and distributes a dataset of US mortality for every year since 1959. This dataset is unique for both its breadth and depth. Each row in the dataset represents a single death, and each column represents a different demographic characteristic of the deceased. The information is derived from death certificates filed by medical professoinals in the 50 states plus Washington DC.
 We made the decision to use the 2019 edition of the dataset since we did not want to focus on COVID-19. Notable information the dataset contains is education, sex, age classification, day of month, place of death, weekday, manner of death, cause of death, and different risk factors that the deceased had.
-In 2019, there were 2,861,523 deaths total. The following are the 10 most common groups split up by race, age, education, and sex
+In 2019, there were 2,861,523 deaths total. The following are the 10 most common groups split up by race, age, education, and sex:
 ```{r grouped_table}
 q <- query(
   "SELECT count(*) as count, racer5, ager52, educ2003, sex
@@ -87,42 +88,20 @@ kable(q %>% select(count, race, age, education, sex))
 ```
 
 ## Secondary Dataset
-For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and trying to use aggregate statistics to analyze how risk factors can be matched with causes of death.
+For our secondary dataset, we are using the Behavioral Risk Factor Surveillance System Survey. This survey includes different free text survey questions from across the United States and territories with responses broken out by subgroup. There is also information on sample size, percent affirmative response, and confidence interval bounds. We combine the secondary dataset by matching up subgroups between the death dataset and the risk factor dataset and using aggregate statistics and free text to analyze how risk factors can be matched with causes of death.
 
 # Questions
-The main question we are asking is: given someone is dead, can we predict how they died? We will approach this by looking at factors such as age, gender, place of death, educational level, health conditions, and race, and build models for manner of death.
+The main question we are asking is: given someone is dead, can we predict how they died? We will approach this by looking at factors such as age, gender, place of death, educational, health conditions, and race, and build models for manner of death.
 
-Additionally, we would also like to observe if there are any irregularities or trends in mortality when looking at specific factors such as the relationship between manner of death across months, deaths by age, deaths by gender and manner of death by education level. This will both inform us on trends in mortality among different demographic factors while also enhancing our predictions about how someone died based on the factors they identify with. 
+Additionally, we observe if there are any irregularities or trends in mortality when looking at specific factors such as the relationship between manner of death across months, deaths by age, deaths by gender and manner of death by education level. This will both inform us on trends in mortality among different demographic factors while also enhancing our predictions about how someone died based on the factors they identify with. 
 
 # Killer Plot
 This plot demonstrates the most common manners of death among people in different cross sections of age and marriage. Head scale is determined by natural causes. Neck scale is determined by pending investigation. Left arm scale is determined by accident. Right arm scale is determined by homicide. Left leg scale is determined by suicide. Right leg scale is determined by could not determine. Rather than determining size by relative count, size is determined by record count. A record is an ailment that is recorded on a death certificate. These follow the ICD-10 standard. Some examples of records are C159: Malignant neoplasm of esophagus and K766: Portal hypertension.
-```{r most_common_record}
-data <- query(
-  "
-  SELECT t1.record_1,
-         ,
-         c.type,
-         c.color
-  FROM dogs d
-  LEFT JOIN cats c USING(color)
-  UNION ALL
-  SELECT d.type,
-          d.color,
-          c.type,
-          c.color
-  FROM cats c
-  LEFT JOIN dogs d USING(color)
-  WHERE d.color IS NULL;
-  "
-)
-```
-
 
 ```{r plot_killer}
 source("plots/killer.r", local = TRUE, print.eval = TRUE)
 draw_killer(person_colors, 1) # this variable is defined globally
 ```
-
 
 The following table displays the average number of records for deaths in the given age ranges. Most age groups die with about 3 records. The average gets lower for younger age groups and older age groups, peaking in the middle age ranges. The age range with the highest record average is 25-34 years with an average record count of 3.304. 
 ```{r table_age}
@@ -142,7 +121,7 @@ draw_table(manner)
 
 # Exploration
 ## Deaths by Weekday
-First, we plotted weekday of death versus death counts. There were the most deaths on Tuesday. However, days have an average of `r query("SELECT count(*) FROM mortality")$count / 365` deaths and 2019 had an extra Tuesday so adjusting for that, the most deaths were on Fridays.
+First, we plotted weekday of death versus death counts. There were the most deaths on Tuesday. However, days have an average of `r query("SELECT count(*) FROM mortality")$count / 365` deaths and 2019 had an extra Tuesday so after adjusting for that, the most deaths were on Fridays.
 
 ```{r plot_weekday_deaths}
 source("plots/weekday_deaths.r", local = TRUE, print.eval = TRUE)
@@ -158,7 +137,7 @@ source("plots/month_count.r", local = TRUE, print.eval = TRUE)
 plotter(month_count_plot(df_month_counts))
 ```
 
-Interestingly, the large number of deaths in the winter months and lower numbers is summer can be entirely explained by natural causes deaths. Since most deaths are due to natural causes, even a small increase in deaths due to natural causes can have a large impact on the total number of deaths. The reasoning for increased deaths due to natural causes in winter months is becauase people spend more time inside with cold weather which leads to increased disease transmission.
+Interestingly, the large number of deaths in the winter months and lower numbers in summer can be explained by natural deaths. Since most deaths are due to natural causes, even a small increase in deaths due to natural causes can have a large impact on the total number of deaths. We speculate that the reasoning for increased deaths due to natural causes in winter months is because people spend more time inside with cold weather which leads to increased disease transmission.
 ```{r plot_month_manner}
 month_count_table()
 plotter(month_count_plot(df_month_counts_filtered, "Deaths per Day in Month Excluding Natural Causes"))
@@ -167,7 +146,7 @@ plotter(month_manner_plot())
 ```
 
 ## Deaths by Age
-Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die. We also created a version of the plot scaled to bucket size. For privacy reasons, the NBER does not release ages of deaths but rather different buckets that the ages fall into. These bucket are of different lengths of time so we created a rescaled version. This plot was then put on a log scale to better showcase the data.
+Next, we plotted age versus death counts. Deaths were most prevalent among older age groups such as those between 70 and 84, although deaths start increasing more quickly at age 60. There is also a spike in those less than 1 day old. However, those greater than 1 day old do not frequently die. We also created a version of the plot scaled to bucket size. For privacy reasons, the NBER does not release ages of deaths but rather different buckets that the ages fall into. These bucket are of different lengths of time so we created a rescaled version on a log scale to better showcase the data.
 
 ```{r plot_age_deaths}
 source("plots/age_deaths.r", local = TRUE, print.eval = TRUE)
@@ -176,7 +155,7 @@ plotter(deaths_by_age_plot_scaled())
 ```
 
 ## Deaths by Manner
-Here, we plotted the manner of death versus age and counted how many people of a certain aged died based on a certain manner of death. A few key finding of this analysis shows that the majority of people die from natural causes, especially those aged 60+ and less than 1 day old, and accidental causes, spanning across all age groups. What this plot may help to inform us about is the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental related deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death among the different age groups, and further promote research in what actual activities people are participating in that lead to their manner of death.
+Here, we plotted the manner of death versus age and counted how many people of an aged died by manner of death. The majority of people die from natural causes, especially those aged 60+ and less than 1 day old. This plot informs us about the behavior and activities that people in a general age group may commonly engage in that may have lead to their manner of passing. By being observant of the manners of death based on age group, preventative methods can be used to decrease the number of accidental deaths if we are able to determine commonly engaged activities for age groups. Using this plot will help us answer the cause of death among the different age groups, and further promote research in what actual activities people are participating in that lead to their manner of death.
 
 ```{r plot_age_manner}
 source("plots/age_manner.r", local = TRUE, print.eval = TRUE)
@@ -184,7 +163,7 @@ plotter(manner_by_age_plot())
 ```
 
 ## Deaths by Age and Gender
-In this plot, we plotted the number of deaths versus age ranges while demonstrating how many men compared to women passed away in each age category. In each of the bars, the red fill represents the amount of women who passed away in that particular age range while the blue accounts for the amount of men. The percentage seen in each bar represents the proportion of men in a given age range that passed away. This analysis shows that the majority of people under the age of 80 who pass away tend to be men, as nearly every bar from ages 0-80 shows the proportion of male deaths to be above 50%. This proportion of male deaths goes down after 80 years of age, and is likely because women who are of an older age tend to live to a complete life expectancy. What this plot may help to inform us about is the differences in male and females lives and life expectancies. Further research into differences in lifestyle choices for men versus women as a whole may help better explain why women tend to live longer than men. Furthermore, this plot accompanied with a plot on cause of death by gender, may assist in determining what kind of, potentially more risky, behaviors men may partake in during their lifetimes that lead to an earlier death than women.
+We plotted the number of deaths versus age ranges while demonstrating how many men compared to women passed away in each age category. In each of the bars, the red fill represents the amount of women who passed away in that particular age range while the blue accounts for the amount of men. This demonstrates that the majority of people under the age of 80 who pass away tend to be men, as nearly every bar from ages 0-80 has the proportion of male deaths to be above 50%. The proportion of male deaths goes down after 80 years of age, and is because women tend to live longer. What this plot may help to inform us about is the differences in male and females lives and life expectancies. Furthermore, this plot accompanied with a plot on cause of death by gender, may assist in determining what kind of, potentially more risky, behaviors men may partake in during their lifetimes that lead to an earlier death than women.
 ```{r plot_age_gender}
 source("plots/age_gender.r", local = TRUE, print.eval = TRUE)
 plotter(deaths_by_age_gender_plot())
@@ -200,21 +179,21 @@ plotter(educ_cause_plot())
 # Analysis
 
 ## Free Text Analysis: Selected Health Conditions by Age Group
-Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you become more likely to be diagnosed with cancer.
+Using regular expressions, we polled the BRFSS data set for questions related to heart conditions, cancer, and depression, while grouping by the age of respondents. Furthermore, we restricted entries to those where participants responded positively, indicating that they did have those conditions. Interestingly, all age groups except 65+ had a high incidence of depression, hovering around the 20% mark. This dips significantly to 15% for the 65+ age group, perhaps because mental health was more stigmatized during their lives and psychological diagnoses were less readily available. In addition, the orange and olive green lines (for heart attack and coronary heart disease, respectively) have a significant degree of overlap, which makes sense, given the conditions. The green line (corresponding to non-skin cancer), is slightly higher then the blue line (corresponding to skin cancer) for all age groups. Furthermore, both cancer have positive slopes, indicating that as your age increases, you are more likely to have been diagnosed with cancer.
 ```{r plot_conditions_text}
 source("plots/cancer.r", local = TRUE, print.eval = TRUE)
 plotter(cancer_free_text_plot())
 ```
 
 ## Logisitic Classification
-The first model we tried was logistic classification. We created indicator variables for each of the manners of death before fitting models containing age, record count, sex, education, place of death, cause of death, and race to each of the indicator variables. Below is a plot of the McFadden R2 values which demonstrates that the logistic classification regression models were much more effective for manners of death like suicide and homicide than for others like not specified and natural.
+The first model we tried to the answer the question of "given someone is dead, how did they die?" was logistic classification. We created indicator variables for each of the manners of death before fitting models containing age, record count, sex, education, place of death, cause of death, and race to each of the indicator variables. Below is a plot of the McFadden R2 values which demonstrates that the logistic classification regression models were much more effective for manners of death like suicide and homicide than for others like not specified and natural.
 ```{r analysis, message=FALSE}
 source("analysis.r", local = TRUE)
 plotter(plot_mcfaddens())
 ```
 
 ## Decision Tree & Random Forest
-The decision tree predicts with 82.11% accuracy and the random forest predicts with 88.89% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable. Each leaf contains the classified manner of death and 7 numbers. Each of the 7 numbers corresponds to the count of each manner that was classified to that. The first number is accident, second is suicide, third is homicide, fourth is pending investigation, fifth is could not determine, sixth is natural, and seventh is not specified.
+We then moved on to a decision tree and random forest classification model. The decision tree predicts with 82.11% accuracy and the random forest predicts with 88.89% accuracy. Each node contains a yes or no classification for either a factor or a logical comparator for a continuous variable. Each leaf contains the classified manner of death and 7 numbers. Each of the 7 numbers corresponds to the count of each manner that was classified to that. The first number is accident, second is suicide, third is homicide, fourth is pending investigation, fifth is could not determine, sixth is natural, and seventh is not specified.
 ```{r decision_tree, echo=FALSE}
 accuracy <- run_decision_tree()
 ```
